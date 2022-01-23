@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>MicaForUWP</id>
+    <version>0.0.1</version>
+    <title>Mica For UWP</title>
+    <authors>wherewhere</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <!-- <icon>icon.png</icon> -->
+    <projectUrl>https://github.com/wherewhere/Mica-For-UWP</projectUrl>
+    <description>Mica For UWP</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <copyright>Copyright © wherewhere 2017 - 2022</copyright>
+    <tags>Mica UWP</tags>
+  </metadata>
+  <files>
+    <!-- WinMd and IntelliSense files -->
+    <file src="bin\Release\MicaForUWP.pdb" target="lib\uap10.0"/>
+    <file src="bin\Release\MicaForUWP.pri" target="lib\uap10.0"/>
+    <file src="bin\Release\MicaForUWP.dll" target="lib\uap10.0"/>
+    <file src="bin\Release\MicaForUWP.XML" target="lib\uap10.0"/>
+  </files>
+</package>
