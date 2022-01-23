@@ -2,17 +2,17 @@
 <package >
   <metadata>
     <id>MicaForUWP</id>
-    <version>0.0.1</version>
-    <title>Mica For UWP</title>
+    <version>0.0.2</version>
+    <title>MicaUWP</title>
     <authors>wherewhere</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <!-- <icon>icon.png</icon> -->
     <projectUrl>https://github.com/wherewhere/Mica-For-UWP</projectUrl>
-    <description>Mica For UWP</description>
+    <description>A UWP Library that implement an easy way to use Mica material without WinUI.</description>
     <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
     <copyright>Copyright © wherewhere 2017 - 2022</copyright>
-    <tags>Mica UWP</tags>
+    <tags>UWP Mica WinUI</tags>
   </metadata>
   <files>
     <!-- WinMd and IntelliSense files -->

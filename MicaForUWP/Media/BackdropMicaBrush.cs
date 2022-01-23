@@ -27,7 +27,7 @@ namespace MicaForUWP.Media
         public static readonly DependencyProperty TintColorProperty = DependencyProperty.Register(
             nameof(TintColor),
             typeof(Color),
-            typeof(BackdropBlurBrush),
+            typeof(BackdropMicaBrush),
             new PropertyMetadata(UIHelper.IsDarkTheme() ? Color.FromArgb(255, 32, 32, 32) : Color.FromArgb(255, 243, 243, 243), OnTintColorPropertyChanged));
 
         /// <summary>
