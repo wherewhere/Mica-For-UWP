@@ -1,6 +1,8 @@
 # Mica For UWP
 一个无需WinUI便可实现的Mica笔刷库
 
+[![Microsoft Store](https://img.shields.io/badge/download-Demo-magenta.svg?label=Microsoft%20Store&logo=Microsoft&style=flat-square&color=11a2f8)](https://www.microsoft.com/store/apps/9NK6JSM7MDNX "Demo")
+
 [![LICENSE](https://img.shields.io/github/license/wherewhere/Mica-For-UWP.svg?label=License&style=flat-square)](https://github.com/wherewhere/Mica-For-UWP/blob/master/LICENSE "LICENSE")
 [![Issues](https://img.shields.io/github/issues/wherewhere/Mica-For-UWP.svg?label=Issues&style=flat-square)](https://github.com/wherewhere/Mica-For-UWP/issues "Issues")
 [![Stargazers](https://img.shields.io/github/stars/wherewhere/Mica-For-UWP.svg?label=Stars&style=flat-square)](https://github.com/wherewhere/Mica-For-UWP/stargazers "Stargazers")
