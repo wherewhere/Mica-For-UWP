@@ -1,0 +1,52 @@
+﻿<Page
+    x:Class="MicaDemo.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:control="using:CoolapkLite.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:MicaDemo"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:media="using:MicaForUWP.Media"
+    Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+    <StackPanel
+        Padding="20"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Background="{StaticResource CardBackgroundFillColorDefaultBrush}"
+        BorderBrush="{StaticResource CardBorderBrush}"
+        BorderThickness="{StaticResource CardBorderThickness}"
+        CornerRadius="8"
+        Orientation="Horizontal">
+        <Button
+            x:Name="Blur"
+            Width="100"
+            Height="100"
+            Margin="8"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Click="Blur_Click">
+            <Button.Content>
+                <StackPanel>
+                    <SymbolIcon x:Name="BlurSymbol" Symbol="Accept" />
+                    <TextBlock Text="Blur" />
+                </StackPanel>
+            </Button.Content>
+        </Button>
+        <Button
+            x:Name="Mica"
+            Width="100"
+            Height="100"
+            Margin="8"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Click="Mica_Click">
+            <Button.Content>
+                <StackPanel>
+                    <SymbolIcon x:Name="MicaSymbol" Symbol="Accept" />
+                    <TextBlock Text="Mica" />
+                </StackPanel>
+            </Button.Content>
+        </Button>
+    </StackPanel>
+</Page>
