@@ -13,10 +13,7 @@ namespace MicaDemo.Helpers
     {
         public static bool HasStatusBar => ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar");
 
-        public static double TitleBarHeight => 32;
-        public static double PageTitleHeight => HasStatusBar ? 48 : 48 + TitleBarHeight;
-        public static Thickness StackPanelMargin => new Thickness(0, PageTitleHeight, 0, 0);
-        public static Thickness ScrollViewerMargin => new Thickness(0, PageTitleHeight, 0, 0);
-        public static Thickness ScrollViewerPadding => new Thickness(0, -PageTitleHeight, 0, 0);
+        public static double TitleBarHeight => HasStatusBar ? 4 : 32;
+        public static Thickness ScrollViewerMargin => new Thickness(0, TitleBarHeight, 0, TitleBarHeight);
     }
 }

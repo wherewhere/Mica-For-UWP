@@ -20,7 +20,7 @@ namespace MicaDemo.Controls
            nameof(TitleHeight),
            typeof(double),
            typeof(TitleBar),
-           new PropertyMetadata(UIHelper.PageTitleHeight));
+           new PropertyMetadata(40d));
 
         public static readonly DependencyProperty IsBackEnableProperty = DependencyProperty.Register(
            nameof(IsBackEnable),

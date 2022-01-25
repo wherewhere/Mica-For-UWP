@@ -24,7 +24,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Visibility="{x:Bind BackgroundVisibility, Mode=OneWay}" />
-        <Grid Height="48" VerticalAlignment="Bottom">
+        <Grid Height="40" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />

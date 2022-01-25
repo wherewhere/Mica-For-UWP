@@ -1,23 +1,20 @@
 ﻿<Page
     x:Class="MicaDemo.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:control="using:CoolapkLite.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="using:MicaDemo"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:media="using:MicaForUWP.Media"
     Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
     <StackPanel
+        x:Name="StackPanel"
         Padding="20"
         HorizontalAlignment="Center"
         VerticalAlignment="Center"
         Background="{StaticResource CardBackgroundFillColorDefaultBrush}"
         BorderBrush="{StaticResource CardBorderBrush}"
         BorderThickness="{StaticResource CardBorderThickness}"
-        CornerRadius="8"
-        Orientation="Horizontal">
+        CornerRadius="8">
         <Button
             x:Name="Blur"
             Width="100"
@@ -48,5 +45,19 @@
                 </StackPanel>
             </Button.Content>
         </Button>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="500" />
+                    </VisualState.StateTriggers>
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="StackPanel" Storyboard.TargetProperty="Orientation">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Horizontal" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </StackPanel>
 </Page>

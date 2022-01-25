@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:control="using:MicaDemo.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="using:MicaDemo.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:MicaForUWP.Media"
     mc:Ignorable="d">
@@ -14,8 +13,8 @@
                 Amount="{Binding Value, ElementName=Amount, Mode=OneWay}"
                 BackgroundSource="{Binding SelectedItem, ElementName=BackgroundSource, Mode=OneWay, Converter={StaticResource TypeConverter}}"
                 FallbackColor="{StaticResource SolidBackgroundFillColorBase}"
-                Opacity="{Binding Value, ElementName=Opacity, Mode=OneWay}"
-                TintColor="{Binding Color, ElementName=TintColor, Mode=OneWay}" />
+                TintColor="{Binding Color, ElementName=TintColor, Mode=OneWay}"
+                TintOpacity="{Binding Value, ElementName=TintOpacity, Mode=OneWay}" />
         </Grid.Background>
         <Grid.ChildrenTransitions>
             <TransitionCollection>
@@ -30,43 +29,51 @@
             BorderBrush="{StaticResource CardBorderBrush}"
             BorderThickness="{StaticResource CardBorderThickness}"
             CornerRadius="8">
-            <ScrollViewer>
-                <StackPanel Padding="20">
-                    <Slider
-                        x:Name="Amount"
-                        Header="Amount"
-                        Maximum="100"
-                        Value="100" />
-                    <Slider
-                        x:Name="Opacity"
-                        Header="Opacity"
-                        Maximum="1"
-                        SmallChange="0.001"
-                        StepFrequency="0.001"
-                        Value="0.8" />
-                    <ComboBox
-                        x:Name="BackgroundSource"
-                        HorizontalAlignment="Stretch"
-                        Header="BackgroundSource"
-                        ItemsSource="{x:Bind BackgroundSources}"
-                        SelectedIndex="1" />
-                    <TextBlock Margin="0,4" Text="TintColor" />
-                    <ColorPicker
-                        x:Name="TintColor"
-                        IsAlphaEnabled="True"
-                        IsAlphaSliderVisible="True"
-                        IsAlphaTextInputVisible="True"
-                        IsMoreButtonVisible="True"
-                        Color="{StaticResource SolidBackgroundFillColorBase}" />
-                </StackPanel>
-            </ScrollViewer>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <control:TitleBar
+                    x:Name="TitleBar"
+                    Title="Blur"
+                    Grid.Row="0"
+                    Margin="8"
+                    BackButtonVisibility="Visible"
+                    BackRequested="TitleBar_BackRequested"
+                    BackgroundVisibility="Collapsed"
+                    RefreshButtonVisibility="Collapsed" />
+                <ScrollViewer Grid.Row="1">
+                    <StackPanel Padding="18,0,18,8">
+                        <Slider
+                            x:Name="Amount"
+                            Header="Amount"
+                            Maximum="100"
+                            Value="100" />
+                        <Slider
+                            x:Name="TintOpacity"
+                            Header="TintOpacity"
+                            Maximum="1"
+                            SmallChange="0.001"
+                            StepFrequency="0.001"
+                            Value="0.8" />
+                        <ComboBox
+                            x:Name="BackgroundSource"
+                            HorizontalAlignment="Stretch"
+                            Header="BackgroundSource"
+                            ItemsSource="{x:Bind BackgroundSources}"
+                            SelectedIndex="1" />
+                        <TextBlock Margin="0,4" Text="TintColor" />
+                        <ColorPicker
+                            x:Name="TintColor"
+                            IsAlphaEnabled="True"
+                            IsAlphaSliderVisible="True"
+                            IsAlphaTextInputVisible="True"
+                            IsMoreButtonVisible="True"
+                            Color="{StaticResource SolidBackgroundFillColorBase}" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
         </Border>
-        <control:TitleBar
-            x:Name="TitleBar"
-            Title="Blur"
-            BackButtonVisibility="Visible"
-            BackRequested="TitleBar_BackRequested"
-            BackgroundVisibility="Collapsed"
-            RefreshButtonVisibility="Collapsed" />
     </Grid>
 </Page>
