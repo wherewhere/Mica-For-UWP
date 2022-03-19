@@ -8,6 +8,7 @@ using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Foundation.Metadata;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -47,8 +48,16 @@ namespace MicaDemo
             }
         }
 
-        private void Mica_Click(object sender, RoutedEventArgs e)
+        private async void Mica_Click(object sender, RoutedEventArgs e)
         {
+            //var testAppUri = new Uri("apkinstaller:"); // The protocol handled by the launched app
+            //var options = new LauncherOptions();
+            //options.TargetApplicationPackageFamilyName = "18184wherewhere.AndroidAppInstaller_4v4sx105x6y4r";
+
+            //var inputData = new ValueSet();
+            //inputData["FilePath"] = @"C:\Users\qq251\Downloads\Programs\weixin8020android2100_arm64_4.apk";
+
+            //LaunchUriResult result = await Launcher.LaunchUriForResultsAsync(testAppUri, options, inputData);
             Frame.Navigate(typeof(MicaPage));
         }
 
