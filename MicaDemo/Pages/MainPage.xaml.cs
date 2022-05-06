@@ -36,19 +36,18 @@ namespace MicaDemo
             TitleBar.ButtonBackgroundColor = TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush"))
             {
-                Mica.IsEnabled = false;
                 BlurSymbol.Symbol = Symbol.Cancel;
                 ToolTipService.SetToolTip(Mica, "不支持Mica");
             }
             if (!ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.XamlCompositionBrushBase"))
             {
-                Blur.IsEnabled = false;
                 BlurSymbol.Symbol = Symbol.Cancel;
+                Mica.IsEnabled = Blur.IsEnabled = false;
                 ToolTipService.SetToolTip(Blur, "不支持高斯模糊");
             }
         }
 
-        private async void Mica_Click(object sender, RoutedEventArgs e)
+        private void Mica_Click(object sender, RoutedEventArgs e)
         {
             //var testAppUri = new Uri("apkinstaller:"); // The protocol handled by the launched app
             //var options = new LauncherOptions();

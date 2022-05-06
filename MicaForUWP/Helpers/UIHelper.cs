@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation.Metadata;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
@@ -10,9 +11,13 @@ namespace MicaForUWP.Helpers
 {
     internal static class UIHelper
     {
-        internal static readonly UISettings UISettings = new UISettings();
+        public static bool HasBackdropBrush = ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateBackdropBrush");
+        public static bool HostBackdropBrush = ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush");
+        public static bool HasWallpaperBackdropBrush = ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush");
 
-        internal static bool IsDarkTheme()
+        public static readonly UISettings UISettings = new UISettings();
+
+        public static bool IsDarkTheme()
         {
             if (Window.Current?.Content is FrameworkElement frameworkElement)
             {
@@ -24,6 +29,6 @@ namespace MicaForUWP.Helpers
             }
         }
 
-        internal static bool IsDarkTheme(ElementTheme theme) => theme == ElementTheme.Default ? Application.Current.RequestedTheme == ApplicationTheme.Dark : theme == ElementTheme.Dark;
+        public static bool IsDarkTheme(ElementTheme theme) => theme == ElementTheme.Default ? Application.Current.RequestedTheme == ApplicationTheme.Dark : theme == ElementTheme.Dark;
     }
 }

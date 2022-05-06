@@ -1,6 +1,8 @@
 ﻿using MicaForUWP.Helpers;
 using Microsoft.Graphics.Canvas.Effects;
 using System;
+using Windows.Foundation;
+using Windows.Foundation.Metadata;
 using Windows.UI;
 using Windows.UI.Composition;
 using Windows.UI.Core;
@@ -12,6 +14,7 @@ namespace MicaForUWP.Media
     /// <summary>
     /// The <see cref="BackdropMicaBrush"/> is a <see cref="Brush"/> that blurs whatever is behind it in the application.
     /// </summary>
+    [ContractVersion(typeof(UniversalApiContract), 262144)]
     public class BackdropMicaBrush : XamlCompositionBrushBase
     {
         CompositionEffectBrush Brush;
@@ -212,17 +215,39 @@ namespace MicaForUWP.Media
                 switch (BackgroundSource)
                 {
                     case BackgroundSource.Backdrop:
+                        if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateBackdropBrush"))
+                        {
+                            CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                            return;
+                        }
                         backdrop = Window.Current.Compositor.CreateBackdropBrush();
                         break;
                     case BackgroundSource.HostBackdrop:
+                        if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
+                        {
+                            CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                            return;
+                        }
                         backdrop = Window.Current.Compositor.CreateHostBackdropBrush();
                         break;
                     case BackgroundSource.MicaBackdrop:
-                        backdrop = Window.Current.Compositor.TryCreateBlurredWallpaperBackdropBrush();
+                        if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush"))
+                        {
+                            backdrop = Window.Current.Compositor.TryCreateBlurredWallpaperBackdropBrush();
+                        }
+                        else if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
+                        {
+                            backdrop = Window.Current.Compositor.CreateHostBackdropBrush();
+                        }
+                        else
+                        {
+                            CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                            return;
+                        }
                         break;
                     default:
-                        backdrop = Window.Current.Compositor.TryCreateBlurredWallpaperBackdropBrush();
-                        break;
+                        CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                        return;
                 }
 
                 CompositionEffectBrush micaEffectBrush = Window.Current.Compositor.CreateEffectFactory(colorBlendEffect, new[] { "TintColor.Color", "TintOpacity.Opacity", "LuminosityColor.Color", "LuminosityOpacity.Opacity" }).CreateBrush();
