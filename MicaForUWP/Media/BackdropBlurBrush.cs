@@ -394,20 +394,23 @@ namespace MicaForUWP.Media
         }
     }
 
+    /// <summary>
+    /// Defines values that specify whether the brush samples from the app content or from the content behind the app window.
+    /// </summary>
     public enum BackgroundSource
     {
         /// <summary>
-        /// 画笔从应用窗口后面的内容采样。
+        /// The brush samples from the content behind the app window.
         /// </summary>
         HostBackdrop = 0,
 
         /// <summary>
-        /// 画笔从应用窗口后面的壁纸采样。
+        /// The brush samples from the wallpaper behind the app window.
         /// </summary>  
         MicaBackdrop = 2,
 
         /// <summary>
-        /// 画笔从应用内容采样。
+        /// The brush samples from the app content.
         /// </summary>
         Backdrop = 1
     }
