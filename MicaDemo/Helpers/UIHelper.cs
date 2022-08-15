@@ -11,6 +11,7 @@ namespace MicaDemo.Helpers
 {
     internal static class UIHelper
     {
+        public static bool HasTitleBar => !CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar;
         public static bool HasStatusBar => ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar");
 
         public static double TitleBarHeight => HasStatusBar ? 4 : 32;

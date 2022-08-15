@@ -1,4 +1,5 @@
-﻿using MicaDemo.Pages;
+﻿using MicaDemo.Helpers;
+using MicaDemo.Pages;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,13 +31,11 @@ namespace MicaDemo
     {
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
-            ApplicationViewTitleBar TitleBar = ApplicationView.GetForCurrentView().TitleBar;
-            TitleBar.ButtonBackgroundColor = TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush"))
             {
-                BlurSymbol.Symbol = Symbol.Cancel;
+                MicaSymbol.Symbol = Symbol.Cancel;
                 ToolTipService.SetToolTip(Mica, "不支持Mica");
             }
             if (!ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.XamlCompositionBrushBase"))

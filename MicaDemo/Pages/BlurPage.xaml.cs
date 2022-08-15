@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -40,6 +41,12 @@ namespace MicaDemo.Pages
         private void TitleBar_BackRequested(object sender, RoutedEventArgs e)
         {
             if (Frame.CanGoBack) { Frame.GoBack(); }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ThemeHelper.RootTheme = ThemeHelper.IsDarkTheme() ? ElementTheme.Light : ElementTheme.Dark;
+            TintColor.Color = Color.FromArgb(TintColor.Color.A, (byte)(255 - TintColor.Color.R), (byte)(255 - TintColor.Color.G), (byte)(255 - TintColor.Color.B));
         }
     }
 }

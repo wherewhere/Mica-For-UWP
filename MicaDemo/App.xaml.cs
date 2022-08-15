@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MicaDemo.Helpers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -78,6 +79,7 @@ namespace MicaDemo
                     // 参数
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
+                ThemeHelper.Initialize();
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();
             }

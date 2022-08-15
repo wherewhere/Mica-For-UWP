@@ -42,5 +42,11 @@ namespace MicaDemo.Pages
         {
             if (Frame.CanGoBack) { Frame.GoBack(); }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ThemeHelper.RootTheme = ThemeHelper.IsDarkTheme() ? ElementTheme.Light : ElementTheme.Dark;
+            TintColor.Color = Color.FromArgb(TintColor.Color.A, (byte)(255 - TintColor.Color.R), (byte)(255 - TintColor.Color.G), (byte)(255 - TintColor.Color.B));
+        }
     }
 }

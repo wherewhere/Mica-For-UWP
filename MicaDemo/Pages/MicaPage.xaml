@@ -7,6 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:MicaForUWP.Media"
     mc:Ignorable="d">
+    <Page.Background>
+        <ImageBrush ImageSource="/Assets/Photos/BigFourSummerHeat.jpg" Stretch="UniformToFill" />
+    </Page.Background>
     <Grid>
         <Grid.Background>
             <media:BackdropMicaBrush
@@ -65,14 +68,13 @@
                             Header="BackgroundSource"
                             ItemsSource="{x:Bind BackgroundSources}"
                             SelectedIndex="2" />
+                        <Button
+                            Margin="0,4"
+                            HorizontalAlignment="Stretch"
+                            Click="Button_Click"
+                            Content="Change Theme" />
                         <TextBlock Margin="0,4" Text="TintColor" />
-                        <ColorPicker
-                            x:Name="TintColor"
-                            IsAlphaEnabled="True"
-                            IsAlphaSliderVisible="True"
-                            IsAlphaTextInputVisible="True"
-                            IsMoreButtonVisible="True"
-                            Color="{StaticResource SolidBackgroundFillColorBase}" />
+                        <control:ColorPickerEx x:Name="TintColor" Color="{ThemeResource SolidBackgroundFillColorBase}" />
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
