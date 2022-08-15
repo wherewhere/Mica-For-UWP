@@ -15,7 +15,6 @@ namespace MicaDemo.Controls
         private Slider RSlider;
         private Slider GSlider;
         private Slider BSlider;
-        private ColorPicker ColorPicker;
 
         public static readonly DependencyProperty ColorProperty = DependencyProperty.Register(
            nameof(Color),
@@ -47,7 +46,7 @@ namespace MicaDemo.Controls
         {
             if (ApiInformation.IsTypePresent("Windows.UI.Xaml.Controls.ColorPicker"))
             {
-                ColorPicker = new ColorPicker
+                ColorPicker ColorPicker = new ColorPicker
                 {
                     IsAlphaEnabled = true,
                     IsAlphaSliderVisible = true,

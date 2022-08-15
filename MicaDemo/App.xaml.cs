@@ -1,4 +1,5 @@
 ﻿using MicaDemo.Helpers;
+using MicaDemo.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,8 +31,9 @@ namespace MicaDemo
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            InitializeComponent();
+            Suspending += OnSuspending;
+            UnhandledException += Application_UnhandledException;
         }
 
         public static TEnum GetEnum<TEnum>(string text) where TEnum : struct
@@ -50,6 +52,8 @@ namespace MicaDemo
         /// <param name="e">有关启动请求和过程的详细信息。</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            RegisterExceptionHandlingSynchronizationContext();
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // 不要在窗口已包含内容时重复应用程序初始化，
@@ -108,5 +112,19 @@ namespace MicaDemo
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
         }
+
+        private void Application_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e) => e.Handled = true;
+
+        /// <summary>
+        /// Should be called from OnActivated and OnLaunched
+        /// </summary>
+        private void RegisterExceptionHandlingSynchronizationContext()
+        {
+            ExceptionHandlingSynchronizationContext
+                .Register()
+                .UnhandledException += SynchronizationContext_UnhandledException;
+        }
+
+        private void SynchronizationContext_UnhandledException(object sender, Helpers.Exceptions.UnhandledExceptionEventArgs e) => e.Handled = true;
     }
 }
