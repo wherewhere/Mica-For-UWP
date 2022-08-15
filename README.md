@@ -1,3 +1,5 @@
+<img alt="Mica For UWP LOGO" src="logo.png" width="200px"/>
+
 # Mica For UWP
 一个无需WinUI便可实现的Mica笔刷库
 

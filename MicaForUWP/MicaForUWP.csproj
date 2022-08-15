@@ -13,13 +13,15 @@
     <RepositoryUrl>https://github.com/wherewhere/Mica-For-UWP</RepositoryUrl>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <TargetFramework>uap10.0</TargetFramework>
-	<TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+	<TargetPlatformMinVersion>10.0</TargetPlatformMinVersion>
     <TargetPlatformVersion>10.0.22621.0</TargetPlatformVersion>
     <TargetPlatformWinMDLocation>C:\Program Files (x86)\Windows Kits\10\UnionMetadata</TargetPlatformWinMDLocation>
     <Title>Mica UWP - Use Mica without WinUI</Title>
-    <VersionPrefix>0.0.5</VersionPrefix>
+    <VersionPrefix>0.0.6</VersionPrefix>
     <Description>A UWP Library that implement an easy way to use Mica material without WinUI.</Description>
+    <PackageIcon>logo.png</PackageIcon>
   </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Properties\**" />
     <EmbeddedResource Remove="Properties\**" />
@@ -27,6 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Win2D.uwp" Version="1.26.0" />
+    <None Include="..\logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Win2D.uwp" Version="1.26.0" PrivateAssets="All" />
   </ItemGroup>
 </Project>
