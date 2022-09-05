@@ -2,6 +2,7 @@
   <PropertyGroup>
     <Authors>wherewhere</Authors>
     <Copyright>Copyright © 2017 - 2022 wherewhere. All Rights Reserved.</Copyright>
+    <ExtrasUwpMetaPackageVersion>6.2.14</ExtrasUwpMetaPackageVersion>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <IncludeSymbols>True</IncludeSymbols>
     <LangVersion>latest</LangVersion>
