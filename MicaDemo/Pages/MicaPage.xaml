@@ -13,6 +13,7 @@
     <Grid>
         <Grid.Background>
             <media:BackdropMicaBrush
+                AlwaysUseFallback="{Binding IsChecked, ElementName=AlwaysUseFallback, Mode=OneWay}"
                 BackgroundSource="{Binding SelectedItem, ElementName=BackgroundSource, Mode=OneWay, Converter={StaticResource TypeConverter}}"
                 FallbackColor="{StaticResource SolidBackgroundFillColorBase}"
                 LuminosityOpacity="{Binding Value, ElementName=LuminosityOpacity, Mode=OneWay}"
@@ -68,8 +69,13 @@
                             Header="BackgroundSource"
                             ItemsSource="{x:Bind BackgroundSources}"
                             SelectedIndex="2" />
-                        <Button
+                        <ToggleButton
+                            x:Name="AlwaysUseFallback"
                             Margin="0,4"
+                            HorizontalAlignment="Stretch"
+                            Content="Always Use Fallback"
+                            IsChecked="False" />
+                        <Button
                             HorizontalAlignment="Stretch"
                             Click="Button_Click"
                             Content="Change Theme" />

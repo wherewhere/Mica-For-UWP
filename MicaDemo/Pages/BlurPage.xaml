@@ -13,6 +13,7 @@
     <Grid>
         <Grid.Background>
             <media:BackdropBlurBrush
+                AlwaysUseFallback="{Binding IsChecked, ElementName=AlwaysUseFallback, Mode=OneWay}"
                 Amount="{Binding Value, ElementName=Amount, Mode=OneWay}"
                 BackgroundSource="{Binding SelectedItem, ElementName=BackgroundSource, Mode=OneWay, Converter={StaticResource TypeConverter}}"
                 FallbackColor="{StaticResource SolidBackgroundFillColorBase}"
@@ -52,7 +53,7 @@
                             x:Name="Amount"
                             Header="Amount"
                             Maximum="100"
-                            Value="100" />
+                            Value="30" />
                         <Slider
                             x:Name="TintOpacity"
                             Header="TintOpacity"
@@ -66,8 +67,13 @@
                             Header="BackgroundSource"
                             ItemsSource="{x:Bind BackgroundSources}"
                             SelectedIndex="1" />
-                        <Button
+                        <ToggleButton
+                            x:Name="AlwaysUseFallback"
                             Margin="0,4"
+                            HorizontalAlignment="Stretch"
+                            Content="Always Use Fallback"
+                            IsChecked="False" />
+                        <Button
                             HorizontalAlignment="Stretch"
                             Click="Button_Click"
                             Content="Change Theme" />

@@ -1,6 +1,4 @@
-﻿using MicaDemo.Helpers;
-using System.ComponentModel;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 

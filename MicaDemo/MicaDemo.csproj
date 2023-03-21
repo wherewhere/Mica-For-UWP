@@ -9,6 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MicaDemo</RootNamespace>
     <AssemblyName>MicaDemo</AssemblyName>
+    <LangVersion>7.3</LangVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.22621.0</TargetPlatformVersion>
@@ -138,10 +139,10 @@
     <Compile Include="Controls\TitleBar.xaml.cs">
       <DependentUpon>TitleBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\Exceptions\ExceptionHandlingSynchronizationContext.cs" />
+    <Compile Include="Helpers\Exceptions\ExceptionHandling.cs" />
     <Compile Include="Helpers\ThemeHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
-    <Compile Include="Helpers\ValueConverters\TypeConverter.cs" />
+    <Compile Include="Helpers\Converters\TypeConverter.cs" />
     <Compile Include="Pages\BlurPage.xaml.cs">
       <DependentUpon>BlurPage.xaml</DependentUpon>
     </Compile>

@@ -42,12 +42,7 @@ namespace MicaDemo.Helpers
         {
             get
             {
-                if (Window.Current.Content is FrameworkElement rootElement)
-                {
-                    return rootElement.RequestedTheme;
-                }
-
-                return ElementTheme.Default;
+                return Window.Current.Content is FrameworkElement rootElement ? rootElement.RequestedTheme : ElementTheme.Default;
             }
             set
             {
@@ -86,11 +81,9 @@ namespace MicaDemo.Helpers
 
         public static bool IsDarkTheme()
         {
-            if (RootTheme == ElementTheme.Default)
-            {
-                return Application.Current.RequestedTheme == ApplicationTheme.Dark;
-            }
-            return RootTheme == ElementTheme.Dark;
+            return RootTheme == ElementTheme.Default
+                ? Application.Current.RequestedTheme == ApplicationTheme.Dark
+                : RootTheme == ElementTheme.Dark;
         }
 
         public static void UpdateSystemCaptionButtonColors()

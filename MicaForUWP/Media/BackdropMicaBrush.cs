@@ -1,5 +1,4 @@
-﻿using MicaForUWP.Helpers;
-using Microsoft.Graphics.Canvas.Effects;
+﻿using Microsoft.Graphics.Canvas.Effects;
 using System;
 using Windows.Foundation;
 using Windows.Foundation.Metadata;
@@ -20,10 +19,81 @@ namespace MicaForUWP.Media
     {
         private bool _isForce = true;
 
-        private CompositionEffectBrush Brush;
+        private CompositionBrush Brush;
         private ScalarKeyFrameAnimation TintOpacityFillAnimation;
         private ScalarKeyFrameAnimation HostOpacityZeroAnimation;
         private ColorKeyFrameAnimation TintToFallBackAnimation;
+
+        #region AlwaysUseFallback
+
+        /// <summary>
+        /// Identifies the <see cref="AlwaysUseFallback"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AlwaysUseFallbackProperty =
+            DependencyProperty.Register(
+                nameof(AlwaysUseFallback),
+                typeof(bool),
+                typeof(BackdropMicaBrush),
+                new PropertyMetadata(false, new PropertyChangedCallback(OnSourcePropertyChanged)));
+
+        /// <summary>
+        /// Gets or sets a value that specifies whether the brush is forced to the solid fallback color.
+        /// </summary>
+        public bool AlwaysUseFallback
+        {
+            get { return (bool)GetValue(AlwaysUseFallbackProperty); }
+            set { SetValue(AlwaysUseFallbackProperty, value); }
+        }
+
+        #endregion
+
+        #region BackgroundSource
+
+        /// <summary>
+        /// Identifies the <see cref="BackgroundSource"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty BackgroundSourceProperty =
+            DependencyProperty.Register(
+                nameof(BackgroundSource),
+                typeof(BackgroundSource),
+                typeof(BackdropMicaBrush),
+                new PropertyMetadata(BackgroundSource.WallpaperBackdrop, OnSourcePropertyChanged));
+
+        /// <summary>
+        /// Gets or sets the background source mode for the effect (the default is <see cref="BackgroundSource.Backdrop"/>).
+        /// </summary>
+        public BackgroundSource BackgroundSource
+        {
+            get => (BackgroundSource)GetValue(BackgroundSourceProperty);
+            set => SetValue(BackgroundSourceProperty, value);
+        }
+
+        /// <summary>
+        /// Updates the UI when <see cref="BackgroundSource"/> changes
+        /// </summary>
+        /// <param name="d">The current <see cref="BackdropMicaBrush"/> instance</param>
+        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance for <see cref="BackgroundSourceProperty"/></param>
+        private static void OnSourcePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            BackdropMicaBrush brush = (BackdropMicaBrush)d;
+
+            brush.OnDisconnected();
+            brush.OnConnected();
+        }
+
+        #endregion
+
+        #region TintColor
+
+        /// <summary>
+        /// Identifies the <see cref="TintColor"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TintColorProperty =
+            DependencyProperty.Register(
+                nameof(TintColor),
+                typeof(Color),
+                typeof(BackdropMicaBrush),
+                new PropertyMetadata(default(Color), OnTintColorPropertyChanged));
 
         /// <summary>
         /// Gets or sets the tint for the effect
@@ -33,15 +103,6 @@ namespace MicaForUWP.Media
             get => (Color)GetValue(TintColorProperty);
             set => SetValue(TintColorProperty, value);
         }
-
-        /// <summary>
-        /// Identifies the <see cref="TintColor"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TintColorProperty = DependencyProperty.Register(
-            nameof(TintColor),
-            typeof(Color),
-            typeof(BackdropMicaBrush),
-            new PropertyMetadata(UIHelper.IsDarkTheme() ? Color.FromArgb(255, 32, 32, 32) : Color.FromArgb(255, 243, 243, 243), OnTintColorPropertyChanged));
 
         /// <summary>
         /// Updates the UI when <see cref="TintColor"/> changes
@@ -66,77 +127,19 @@ namespace MicaForUWP.Media
             }
         }
 
-        /// <summary>
-        /// Gets or sets the background source mode for the effect (the default is <see cref="BackgroundSource.Backdrop"/>).
-        /// </summary>
-        public BackgroundSource BackgroundSource
-        {
-            get => (BackgroundSource)GetValue(BackgroundSourceProperty);
-            set => SetValue(BackgroundSourceProperty, value);
-        }
+        #endregion
+
+        #region LuminosityOpacity
 
         /// <summary>
-        /// Identifies the <see cref="BackgroundSource"/> dependency property.
+        /// Identifies the <see cref="LuminosityOpacity"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty BackgroundSourceProperty = DependencyProperty.Register(
-            nameof(BackgroundSource),
-            typeof(BackgroundSource),
-            typeof(BackdropMicaBrush),
-            new PropertyMetadata(BackgroundSource.MicaBackdrop, OnSourcePropertyChanged));
-
-        /// <summary>
-        /// Updates the UI when <see cref="BackgroundSource"/> changes
-        /// </summary>
-        /// <param name="d">The current <see cref="BackdropMicaBrush"/> instance</param>
-        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance for <see cref="BackgroundSourceProperty"/></param>
-        private static void OnSourcePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            BackdropMicaBrush brush = (BackdropMicaBrush)d;
-
-            brush.OnDisconnected();
-            brush.OnConnected();
-        }
-
-        /// <summary>
-        /// Gets or sets the tint opacity factor for the effect (default is 0.5, must be in the [0, 1] range)
-        /// </summary>
-        public double TintOpacity
-        {
-            get => (double)GetValue(TintOpacityProperty);
-            set => SetValue(TintOpacityProperty, value);
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="TintOpacity"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TintOpacityProperty = DependencyProperty.Register(
-            nameof(TintOpacity),
-            typeof(double),
-            typeof(BackdropMicaBrush),
-            new PropertyMetadata(UIHelper.IsDarkTheme() ? 0.8d : 0.5d, OnTintOpacityPropertyChanged));
-
-        /// <summary>
-        /// Updates the UI when <see cref="TintOpacity"/> changes
-        /// </summary>
-        /// <param name="d">The current <see cref="BackdropMicaBrush"/> instance</param>
-        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance for <see cref="TintOpacityProperty"/></param>
-        private static void OnTintOpacityPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            BackdropMicaBrush brush = (BackdropMicaBrush)d;
-
-            if ((double)e.NewValue > 1) { brush.TintOpacity = 1d; }
-            else if ((double)e.NewValue < 0) { brush.TintOpacity = 0d; }
-            brush.TintOpacityFillAnimation?.SetScalarParameter("TintOpacity", (float)(double)e.NewValue);
-
-            if (brush._isForce)
-            {
-                brush.CompositionBrush?.Properties.InsertScalar("TintOpacity.Opacity", (float)(double)e.NewValue);
-            }
-            else
-            {
-                brush.Brush?.Properties.InsertScalar("TintOpacity.Opacity", (float)(double)e.NewValue);
-            }
-        }
+        public static readonly DependencyProperty LuminosityOpacityProperty =
+            DependencyProperty.Register(
+                nameof(LuminosityOpacity),
+                typeof(double),
+                typeof(BackdropMicaBrush),
+                new PropertyMetadata(1d, OnLuminosityOpacityPropertyChanged));
 
         /// <summary>
         /// Gets or sets the tint opacity factor for the effect (default is 0.5, must be in the [0, 1] range)
@@ -146,15 +149,6 @@ namespace MicaForUWP.Media
             get => (double)GetValue(LuminosityOpacityProperty);
             set => SetValue(LuminosityOpacityProperty, value);
         }
-
-        /// <summary>
-        /// Identifies the <see cref="LuminosityOpacity"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty LuminosityOpacityProperty = DependencyProperty.Register(
-            nameof(LuminosityOpacity),
-            typeof(double),
-            typeof(BackdropMicaBrush),
-            new PropertyMetadata(1d, OnLuminosityOpacityPropertyChanged));
 
         /// <summary>
         /// Updates the UI when <see cref="LuminosityOpacity"/> changes
@@ -179,6 +173,76 @@ namespace MicaForUWP.Media
             }
         }
 
+        #endregion
+
+        #region TintOpacity
+
+        /// <summary>
+        /// Identifies the <see cref="TintOpacity"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TintOpacityProperty = DependencyProperty.Register(
+            nameof(TintOpacity),
+            typeof(double),
+            typeof(BackdropMicaBrush),
+            new PropertyMetadata(0.8d, OnTintOpacityPropertyChanged));
+
+        /// <summary>
+        /// Gets or sets the tint opacity factor for the effect (default is 0.8, must be in the [0, 1] range)
+        /// </summary>
+        public double TintOpacity
+        {
+            get => (double)GetValue(TintOpacityProperty);
+            set => SetValue(TintOpacityProperty, value);
+        }
+
+        /// <summary>
+        /// Updates the UI when <see cref="TintOpacity"/> changes
+        /// </summary>
+        /// <param name="d">The current <see cref="BackdropMicaBrush"/> instance</param>
+        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance for <see cref="TintOpacityProperty"/></param>
+        private static void OnTintOpacityPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            BackdropMicaBrush brush = (BackdropMicaBrush)d;
+
+            if ((double)e.NewValue > 1) { brush.TintOpacity = 1d; }
+            else if ((double)e.NewValue < 0) { brush.TintOpacity = 0d; }
+            brush.TintOpacityFillAnimation?.SetScalarParameter("TintOpacity", (float)(double)e.NewValue);
+
+            if (brush._isForce)
+            {
+                brush.CompositionBrush?.Properties.InsertScalar("TintOpacity.Opacity", (float)(double)e.NewValue);
+            }
+            else
+            {
+                brush.Brush?.Properties.InsertScalar("TintOpacity.Opacity", (float)(double)e.NewValue);
+            }
+        }
+
+        #endregion
+
+        #region TintTransitionDuration
+
+        /// <summary>
+        /// Identifies the <see cref="TintTransitionDuration"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TintTransitionDurationProperty =
+            DependencyProperty.Register(
+                nameof(TintTransitionDuration),
+                typeof(TimeSpan),
+                typeof(BackdropMicaBrush),
+                new PropertyMetadata(TimeSpan.FromMilliseconds(500)));
+
+        /// <summary>
+        /// Gets or sets the length of the automatic transition animation used when the TintColor changes.
+        /// </summary>
+        public TimeSpan TintTransitionDuration
+        {
+            get => (TimeSpan)GetValue(TintTransitionDurationProperty);
+            set => SetValue(TintTransitionDurationProperty, value);
+        }
+
+        #endregion
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BackdropMicaBrush"/> class.
         /// </summary>
@@ -200,123 +264,134 @@ namespace MicaForUWP.Media
                     return;
                 }
 
-                ColorSourceEffect tintColorEffect = new ColorSourceEffect()
+                if (!AlwaysUseFallback)
                 {
-                    Color = TintColor,
-                    Name = "TintColor"
-                };
+                    ColorSourceEffect tintColorEffect = new ColorSourceEffect()
+                    {
+                        Color = TintColor,
+                        Name = "TintColor"
+                    };
 
-                OpacityEffect tintOpacityEffect = new OpacityEffect()
-                {
-                    Name = "TintOpacity",
-                    Source = tintColorEffect,
-                    Opacity = (float)TintOpacity
-                };
+                    OpacityEffect tintOpacityEffect = new OpacityEffect()
+                    {
+                        Name = "TintOpacity",
+                        Source = tintColorEffect,
+                        Opacity = (float)TintOpacity
+                    };
 
-                ColorSourceEffect luminosityColorEffect = new ColorSourceEffect()
-                {
-                    Color = TintColor,
-                    Name = "LuminosityColor"
-                };
+                    ColorSourceEffect luminosityColorEffect = new ColorSourceEffect()
+                    {
+                        Color = TintColor,
+                        Name = "LuminosityColor"
+                    };
 
-                OpacityEffect luminosityOpacityEffect = new OpacityEffect()
-                {
-                    Name = "LuminosityOpacity",
-                    Source = luminosityColorEffect,
-                    Opacity = (float)LuminosityOpacity
-                };
+                    OpacityEffect luminosityOpacityEffect = new OpacityEffect()
+                    {
+                        Name = "LuminosityOpacity",
+                        Source = luminosityColorEffect,
+                        Opacity = (float)LuminosityOpacity
+                    };
 
-                BlendEffect luminosityBlendEffect = new BlendEffect()
-                {
-                    Mode = BlendEffectMode.Color,
-                    Foreground = luminosityOpacityEffect,
-                    Background = new CompositionEffectSourceParameter("BlurredWallpaperBackdrop")
-                };
+                    BlendEffect luminosityBlendEffect = new BlendEffect()
+                    {
+                        Mode = BlendEffectMode.Color,
+                        Foreground = luminosityOpacityEffect,
+                        Background = new CompositionEffectSourceParameter("BlurredWallpaperBackdrop")
+                    };
 
-                BlendEffect colorBlendEffect = new BlendEffect()
-                {
-                    Foreground = tintOpacityEffect,
-                    Mode = BlendEffectMode.Luminosity,
-                    Background = luminosityBlendEffect,
-                };
+                    BlendEffect colorBlendEffect = new BlendEffect()
+                    {
+                        Foreground = tintOpacityEffect,
+                        Mode = BlendEffectMode.Luminosity,
+                        Background = luminosityBlendEffect,
+                    };
 
-                CompositionBackdropBrush backdrop;
+                    CompositionBackdropBrush backdrop;
 
-                switch (BackgroundSource)
-                {
-                    case BackgroundSource.Backdrop:
-                        if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateBackdropBrush"))
-                        {
-                            CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
-                            return;
-                        }
-                        backdrop = Window.Current.Compositor.CreateBackdropBrush();
-                        break;
-                    case BackgroundSource.HostBackdrop:
-                        if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
-                        {
-                            CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
-                            return;
-                        }
-                        backdrop = Window.Current.Compositor.CreateHostBackdropBrush();
-                        break;
-                    case BackgroundSource.MicaBackdrop:
-                        if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush"))
-                        {
-                            backdrop = Window.Current.Compositor.TryCreateBlurredWallpaperBackdropBrush();
-                        }
-                        else if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
-                        {
+                    switch (BackgroundSource)
+                    {
+                        case BackgroundSource.Backdrop:
+                            if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateBackdropBrush"))
+                            {
+                                CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                                return;
+                            }
+                            backdrop = Window.Current.Compositor.CreateBackdropBrush();
+                            break;
+                        case BackgroundSource.HostBackdrop:
+                            if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
+                            {
+                                CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                                return;
+                            }
                             backdrop = Window.Current.Compositor.CreateHostBackdropBrush();
-                        }
-                        else
-                        {
+                            break;
+                        case BackgroundSource.WallpaperBackdrop:
+                            if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush"))
+                            {
+                                backdrop = Window.Current.Compositor.TryCreateBlurredWallpaperBackdropBrush();
+                            }
+                            else if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
+                            {
+                                backdrop = Window.Current.Compositor.CreateHostBackdropBrush();
+                            }
+                            else
+                            {
+                                CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                                return;
+                            }
+                            break;
+                        default:
                             CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
                             return;
-                        }
-                        break;
-                    default:
-                        CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
-                        return;
+                    }
+
+                    CompositionEffectBrush micaEffectBrush = Window.Current.Compositor.CreateEffectFactory(colorBlendEffect, new[] { "TintColor.Color", "TintOpacity.Opacity", "LuminosityColor.Color", "LuminosityOpacity.Opacity" }).CreateBrush();
+                    micaEffectBrush.SetSourceParameter("BlurredWallpaperBackdrop", backdrop);
+
+                    Brush = micaEffectBrush;
+                    CompositionBrush = Brush;
+
+                    LinearEasingFunction line = Window.Current.Compositor.CreateLinearEasingFunction();
+
+                    TimeSpan duration = TintTransitionDuration == TimeSpan.Zero ? TimeSpan.FromTicks(10000) : TintTransitionDuration;
+                    TimeSpan switchDuration = TimeSpan.FromMilliseconds(167);
+
+                    TintOpacityFillAnimation = Window.Current.Compositor.CreateScalarKeyFrameAnimation();
+                    TintOpacityFillAnimation.InsertExpressionKeyFrame(0f, "TintOpacity", line);
+                    TintOpacityFillAnimation.InsertKeyFrame(1f, 1f, line);
+                    TintOpacityFillAnimation.Duration = switchDuration;
+                    TintOpacityFillAnimation.Target = "TintOpacity.Opacity";
+
+                    HostOpacityZeroAnimation = Window.Current.Compositor.CreateScalarKeyFrameAnimation();
+                    HostOpacityZeroAnimation.InsertExpressionKeyFrame(0f, "LuminosityOpacity", line);
+                    HostOpacityZeroAnimation.InsertKeyFrame(1f, 1f, line);
+                    HostOpacityZeroAnimation.Duration = switchDuration;
+                    HostOpacityZeroAnimation.Target = "LuminosityOpacity.Opacity";
+
+                    TintToFallBackAnimation = Window.Current.Compositor.CreateColorKeyFrameAnimation();
+                    TintToFallBackAnimation.InsertExpressionKeyFrame(0f, "TintColor", line);
+                    TintToFallBackAnimation.InsertExpressionKeyFrame(1f, "FallbackColor", line);
+                    TintToFallBackAnimation.Duration = duration;
+                    TintToFallBackAnimation.Target = "TintColor.Color";
+
+                    TintToFallBackAnimation?.SetColorParameter("TintColor", TintColor);
+                    TintOpacityFillAnimation?.SetScalarParameter("TintOpacity", (float)TintOpacity);
+                    HostOpacityZeroAnimation?.SetScalarParameter("LuminosityOpacity", (float)LuminosityOpacity);
+
+                    CoreWindow.GetForCurrentThread().Activated += CoreWindow_Activated;
+                    CoreWindow.GetForCurrentThread().VisibilityChanged += CoreWindow_VisibilityChanged;
+                    PowerManager.EnergySaverStatusChanged += On_EnergySaverStatusChanged;
+
+                    if (PowerManager.EnergySaverStatus == EnergySaverStatus.On)
+                    {
+                        SetCompositionFocus(false);
+                    }
                 }
-
-                CompositionEffectBrush micaEffectBrush = Window.Current.Compositor.CreateEffectFactory(colorBlendEffect, new[] { "TintColor.Color", "TintOpacity.Opacity", "LuminosityColor.Color", "LuminosityOpacity.Opacity" }).CreateBrush();
-                micaEffectBrush.SetSourceParameter("BlurredWallpaperBackdrop", backdrop);
-
-                Brush = micaEffectBrush;
-                CompositionBrush = Brush;
-
-                LinearEasingFunction line = Window.Current.Compositor.CreateLinearEasingFunction();
-
-                TintOpacityFillAnimation = Window.Current.Compositor.CreateScalarKeyFrameAnimation();
-                TintOpacityFillAnimation.InsertExpressionKeyFrame(0f, "TintOpacity", line);
-                TintOpacityFillAnimation.InsertKeyFrame(1f, 1f, line);
-                TintOpacityFillAnimation.Duration = TimeSpan.FromSeconds(0.1d);
-                TintOpacityFillAnimation.Target = "TintOpacity.Opacity";
-
-                HostOpacityZeroAnimation = Window.Current.Compositor.CreateScalarKeyFrameAnimation();
-                HostOpacityZeroAnimation.InsertExpressionKeyFrame(0f, "LuminosityOpacity", line);
-                HostOpacityZeroAnimation.InsertKeyFrame(1f, 1f, line);
-                HostOpacityZeroAnimation.Duration = TimeSpan.FromSeconds(0.1d);
-                HostOpacityZeroAnimation.Target = "LuminosityOpacity.Opacity";
-
-                TintToFallBackAnimation = Window.Current.Compositor.CreateColorKeyFrameAnimation();
-                TintToFallBackAnimation.InsertExpressionKeyFrame(0f, "TintColor", line);
-                TintToFallBackAnimation.InsertExpressionKeyFrame(1f, "FallbackColor", line);
-                TintToFallBackAnimation.Duration = TimeSpan.FromSeconds(0.1d);
-                TintToFallBackAnimation.Target = "TintColor.Color";
-
-                TintToFallBackAnimation?.SetColorParameter("TintColor", TintColor);
-                TintOpacityFillAnimation?.SetScalarParameter("TintOpacity", (float)TintOpacity);
-                HostOpacityZeroAnimation?.SetScalarParameter("LuminosityOpacity", (float)LuminosityOpacity);
-
-                CoreWindow.GetForCurrentThread().Activated += CoreWindow_Activated;
-                CoreWindow.GetForCurrentThread().VisibilityChanged += CoreWindow_VisibilityChanged;
-                PowerManager.EnergySaverStatusChanged += On_EnergySaverStatusChanged;
-
-                if (PowerManager.EnergySaverStatus == EnergySaverStatus.On)
+                else
                 {
-                    SetCompositionFocus(false);
+                    Brush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                    CompositionBrush = Brush;
                 }
             }
         }
@@ -340,7 +415,7 @@ namespace MicaForUWP.Media
 
         private void CoreWindow_Activated(CoreWindow sender, WindowActivatedEventArgs args)
         {
-            if (BackgroundSource == BackgroundSource.HostBackdrop || BackgroundSource == BackgroundSource.MicaBackdrop)
+            if (BackgroundSource == BackgroundSource.HostBackdrop || BackgroundSource == BackgroundSource.WallpaperBackdrop)
             {
                 SetCompositionFocus(args.WindowActivationState != CoreWindowActivationState.Deactivated);
             }
@@ -348,7 +423,7 @@ namespace MicaForUWP.Media
 
         private void CoreWindow_VisibilityChanged(CoreWindow sender, VisibilityChangedEventArgs args)
         {
-            if (BackgroundSource == BackgroundSource.HostBackdrop || BackgroundSource == BackgroundSource.MicaBackdrop)
+            if (BackgroundSource == BackgroundSource.HostBackdrop || BackgroundSource == BackgroundSource.WallpaperBackdrop)
             {
                 SetCompositionFocus(args.Visible);
             }
