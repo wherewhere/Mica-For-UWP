@@ -20,7 +20,7 @@
     <TargetPlatformMinVersion>10.0</TargetPlatformMinVersion>
     <TargetPlatformVersion>10.0.22621.0</TargetPlatformVersion>
     <Title>Mica UWP - Use Mica without WinUI</Title>
-    <VersionPrefix>0.0.7</VersionPrefix>
+    <VersionPrefix>0.1.8</VersionPrefix>
     <Description>A UWP Library that implement an easy way to use Mica material without WinUI.</Description>
     <PackageIcon>logo.png</PackageIcon>
   </PropertyGroup>

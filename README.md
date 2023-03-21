@@ -36,7 +36,7 @@
         TintColor="{ThemeResource SolidBackgroundFillColorBase}" />
     <media:BackdropMicaBrush
         x:Key="ApplicationPageBackgroundThemeMicaWallpaperBrush"
-        BackgroundSource="MicaBackdrop"
+        BackgroundSource="WallpaperBackdrop"
         FallbackColor="{ThemeResource SolidBackgroundFillColorBase}"
         TintColor="{ThemeResource SolidBackgroundFillColorBase}" />
 </ResourceDictionary>
