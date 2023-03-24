@@ -3,26 +3,47 @@
     <Authors>wherewhere</Authors>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <Copyright>Copyright © 2017 - 2023 wherewhere. All Rights Reserved.</Copyright>
-    <Deterministic>true</Deterministic>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <Deterministic>True</Deterministic>
+    <EmbedUntrackedSources>True</EmbedUntrackedSources>
     <ExtrasUwpMetaPackageVersion>6.2.14</ExtrasUwpMetaPackageVersion>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <IncludeSymbols>True</IncludeSymbols>
     <LangVersion>7.3</LangVersion>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/wherewhere/Mica-For-UWP</PackageProjectUrl>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageTags>UWP;Mica;WinUI</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/wherewhere/Mica-For-UWP</RepositoryUrl>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <TargetFramework>uap10.0</TargetFramework>
-    <TargetPlatformMinVersion>10.0</TargetPlatformMinVersion>
-    <TargetPlatformVersion>10.0.22621.0</TargetPlatformVersion>
+    <TargetFramework Condition="'$(FullTargets)' != 'true'">uap10.0</TargetFramework>
+    <TargetFrameworks Condition="'$(FullTargets)' == 'true'">native;netcoreapp3.1;uap10.0;uap10.0.15138.0</TargetFrameworks>
     <Title>Mica UWP - Use Mica without WinUI</Title>
     <VersionPrefix>0.1.8</VersionPrefix>
     <Description>A UWP Library that implement an easy way to use Mica material without WinUI.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeSymbols>True</IncludeSymbols>
+    <NuspecFile Condition="'$(FullTargets)' == 'true'">MicaForUWP.nuspec</NuspecFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/wherewhere/Mica-For-UWP</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageTags>UWP;Mica;WinUI</PackageTags>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageIcon>logo.png</PackageIcon>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NuspecProperties>id=$(AssemblyName);version=$(VersionPrefix);title=$(Title);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);license=$(PackageLicenseExpression);projectUrl=$(PackageProjectUrl);description=$(Description);copyright=$(Copyright);repositoryType=$(RepositoryType);repositoryUrl=$(PackageProjectUrl);repositoryCommit=$(RepositoryCommit);buildOutput=bin\$(Configuration)</NuspecProperties>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Win2D.uwp" Version="1.26.0" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
+    <TargetPlatformMinVersion>10.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.22621.0</TargetPlatformVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.15138.0'">
+    <TargetPlatformMinVersion>10.0.15138.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.22621.0</TargetPlatformVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,12 +51,7 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+    <None Remove="MicaForUWP.nuspec" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Win2D.uwp" Version="1.26.0" />
-  </ItemGroup>
 </Project>

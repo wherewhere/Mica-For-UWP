@@ -15,6 +15,9 @@ namespace MicaForUWP.Media
     /// The <see cref="BackdropMicaBrush"/> is a <see cref="Brush"/> that blurs whatever is behind it in the application.
     /// </summary>
     [ContractVersion(typeof(UniversalApiContract), 262144)]
+#if WINRT
+    sealed
+#endif
     public class BackdropMicaBrush : XamlCompositionBrushBase
     {
         private bool _isForce = true;
@@ -29,8 +32,16 @@ namespace MicaForUWP.Media
         /// <summary>
         /// Identifies the <see cref="AlwaysUseFallback"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty AlwaysUseFallbackProperty =
-            DependencyProperty.Register(
+#if !WINRT
+        readonly
+#endif
+        public static DependencyProperty AlwaysUseFallbackProperty
+#if WINRT
+            => _alwaysUseFallbackProperty;
+
+        private static readonly DependencyProperty _alwaysUseFallbackProperty
+#endif
+            = DependencyProperty.Register(
                 nameof(AlwaysUseFallback),
                 typeof(bool),
                 typeof(BackdropMicaBrush),
@@ -41,8 +52,8 @@ namespace MicaForUWP.Media
         /// </summary>
         public bool AlwaysUseFallback
         {
-            get { return (bool)GetValue(AlwaysUseFallbackProperty); }
-            set { SetValue(AlwaysUseFallbackProperty, value); }
+            get => (bool)GetValue(AlwaysUseFallbackProperty);
+            set => SetValue(AlwaysUseFallbackProperty, value);
         }
 
         #endregion
@@ -52,8 +63,16 @@ namespace MicaForUWP.Media
         /// <summary>
         /// Identifies the <see cref="BackgroundSource"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty BackgroundSourceProperty =
-            DependencyProperty.Register(
+#if !WINRT
+        readonly
+#endif
+        public static DependencyProperty BackgroundSourceProperty
+#if WINRT
+            => _backgroundSourceProperty;
+
+        private static readonly DependencyProperty _backgroundSourceProperty
+#endif
+            = DependencyProperty.Register(
                 nameof(BackgroundSource),
                 typeof(BackgroundSource),
                 typeof(BackdropMicaBrush),
@@ -88,8 +107,16 @@ namespace MicaForUWP.Media
         /// <summary>
         /// Identifies the <see cref="TintColor"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty TintColorProperty =
-            DependencyProperty.Register(
+#if !WINRT
+        readonly
+#endif
+        public static DependencyProperty TintColorProperty
+#if WINRT
+            => _tintColorProperty;
+
+        private static readonly DependencyProperty _tintColorProperty
+#endif
+            = DependencyProperty.Register(
                 nameof(TintColor),
                 typeof(Color),
                 typeof(BackdropMicaBrush),
@@ -134,8 +161,16 @@ namespace MicaForUWP.Media
         /// <summary>
         /// Identifies the <see cref="LuminosityOpacity"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty LuminosityOpacityProperty =
-            DependencyProperty.Register(
+#if !WINRT
+        readonly
+#endif
+        public static DependencyProperty LuminosityOpacityProperty
+#if WINRT
+            => _luminosityOpacityProperty;
+
+        private static readonly DependencyProperty _luminosityOpacityProperty
+#endif
+            = DependencyProperty.Register(
                 nameof(LuminosityOpacity),
                 typeof(double),
                 typeof(BackdropMicaBrush),
@@ -180,11 +215,20 @@ namespace MicaForUWP.Media
         /// <summary>
         /// Identifies the <see cref="TintOpacity"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty TintOpacityProperty = DependencyProperty.Register(
-            nameof(TintOpacity),
-            typeof(double),
-            typeof(BackdropMicaBrush),
-            new PropertyMetadata(0.8d, OnTintOpacityPropertyChanged));
+#if !WINRT
+        readonly
+#endif
+        public static DependencyProperty TintOpacityProperty
+#if WINRT
+            => _tintOpacityProperty;
+
+        private static readonly DependencyProperty _tintOpacityProperty
+#endif
+            = DependencyProperty.Register(
+                nameof(TintOpacity),
+                typeof(double),
+                typeof(BackdropMicaBrush),
+                new PropertyMetadata(0.8d, OnTintOpacityPropertyChanged));
 
         /// <summary>
         /// Gets or sets the tint opacity factor for the effect (default is 0.8, must be in the [0, 1] range)
@@ -225,8 +269,16 @@ namespace MicaForUWP.Media
         /// <summary>
         /// Identifies the <see cref="TintTransitionDuration"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty TintTransitionDurationProperty =
-            DependencyProperty.Register(
+#if !WINRT
+        readonly
+#endif
+        public static DependencyProperty TintTransitionDurationProperty
+#if WINRT
+            => _tintTransitionDurationProperty;
+
+        private static readonly DependencyProperty _tintTransitionDurationProperty
+#endif
+            = DependencyProperty.Register(
                 nameof(TintTransitionDuration),
                 typeof(TimeSpan),
                 typeof(BackdropMicaBrush),

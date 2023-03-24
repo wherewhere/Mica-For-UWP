@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$authors$</authors>
+    <owners></owners>
+    <requireLicenseAcceptance>$requireLicenseAcceptance$</requireLicenseAcceptance>
+    <license type="expression">$license$</license>
+    <projectUrl>$projectUrl$</projectUrl>
+    <description>$description$</description>
+    <copyright>$copyright$</copyright>
+    <tags>UWP;Mica;WinUI</tags>
+    <repository type="$repositoryType$" url="$repositoryUrl$" commit="$repositoryCommit$" />
+    <dependencies>
+      <group targetFramework="native">
+        <dependency id="Win2D.uwp" version="1.26.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="UAP10.0">
+        <dependency id="Win2D.uwp" version="1.26.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETCoreApp3.1">
+        <dependency id="Microsoft.Windows.SDK.Contracts" version="10.0.22621.755" exclude="Build,Analyzers" />
+        <dependency id="Win2D.uwp" version="1.26.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="UAP10.0.15138">
+        <dependency id="Win2D.uwp" version="1.26.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="$buildOutput$\native\MicaForUWP.*" target="lib\native\" />
+    <file src="$buildOutput$\netcoreapp3.1\MicaForUWP.*" target="lib\netcoreapp3.1\" />
+    <file src="$buildOutput$\uap10.0\MicaForUWP.*" target="lib\uap10.0\" />
+    <file src="$buildOutput$\uap10.0.15138.0\MicaForUWP.*" target="lib\uap10.0.15138\" />
+  </files>
+</package>
