@@ -37,11 +37,10 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Click="BackButton_Click"
+                Content="&#xE72B;"
                 IsEnabled="{x:Bind IsBackEnable, Mode=OneWay}"
                 Style="{StaticResource IconButtonStyle}"
-                Visibility="{x:Bind BackButtonVisibility, Mode=OneWay}">
-                <SymbolIcon Symbol="Back" />
-            </Button>
+                Visibility="{x:Bind BackButtonVisibility, Mode=OneWay}" />
             <TextBlock
                 x:Name="TitleBlock"
                 Grid.Column="1"
@@ -71,10 +70,9 @@
                 Grid.Column="4"
                 VerticalAlignment="Center"
                 Click="RefreshButton_Click"
+                Content="&#xE72C;"
                 Style="{StaticResource IconButtonStyle}"
-                Visibility="{x:Bind RefreshButtonVisibility, Mode=OneWay}">
-                <SymbolIcon Symbol="Refresh" />
-            </Button>
+                Visibility="{x:Bind RefreshButtonVisibility, Mode=OneWay}" />
         </Grid>
     </Grid>
 </UserControl>

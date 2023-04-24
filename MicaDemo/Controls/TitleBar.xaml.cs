@@ -1,54 +1,63 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Markup;
 
 //https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
 
 namespace MicaDemo.Controls
 {
+    [ContentProperty(Name = "RightAreaContent")]
     public sealed partial class TitleBar : UserControl
     {
-        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
-           nameof(Title),
-           typeof(string),
-           typeof(TitleBar),
-           new PropertyMetadata(default(string)));
+        public static readonly DependencyProperty TitleProperty =
+            DependencyProperty.Register(
+                nameof(Title),
+                typeof(string),
+                typeof(TitleBar),
+                new PropertyMetadata(default(string)));
 
-        public static readonly DependencyProperty TitleHeightProperty = DependencyProperty.Register(
-           nameof(TitleHeight),
-           typeof(double),
-           typeof(TitleBar),
-           new PropertyMetadata(40d));
+        public static readonly DependencyProperty TitleHeightProperty =
+            DependencyProperty.Register(
+                nameof(TitleHeight),
+                typeof(double),
+                typeof(TitleBar),
+                new PropertyMetadata(40d));
 
-        public static readonly DependencyProperty IsBackEnableProperty = DependencyProperty.Register(
-           nameof(IsBackEnable),
-           typeof(bool),
-           typeof(TitleBar),
-           new PropertyMetadata(true));
+        public static readonly DependencyProperty IsBackEnableProperty =
+            DependencyProperty.Register(
+                nameof(IsBackEnable),
+                typeof(bool),
+                typeof(TitleBar),
+                new PropertyMetadata(true));
 
-        public static readonly DependencyProperty RightAreaContentProperty = DependencyProperty.Register(
-           nameof(RightAreaContent),
-           typeof(object),
-           typeof(TitleBar),
-           null);
+        public static readonly DependencyProperty RightAreaContentProperty =
+            DependencyProperty.Register(
+                nameof(RightAreaContent),
+                typeof(object),
+                typeof(TitleBar),
+                null);
 
-        public static readonly DependencyProperty BackgroundVisibilityProperty = DependencyProperty.Register(
-           nameof(BackgroundVisibility),
-           typeof(Visibility),
-           typeof(TitleBar),
-           new PropertyMetadata(Visibility.Collapsed));
+        public static readonly DependencyProperty BackgroundVisibilityProperty =
+            DependencyProperty.Register(
+                nameof(BackgroundVisibility),
+                typeof(Visibility),
+                typeof(TitleBar),
+                new PropertyMetadata(Visibility.Collapsed));
 
-        public static readonly DependencyProperty BackButtonVisibilityProperty = DependencyProperty.Register(
-           nameof(BackButtonVisibility),
-           typeof(Visibility),
-           typeof(TitleBar),
-           new PropertyMetadata(Visibility.Visible));
+        public static readonly DependencyProperty BackButtonVisibilityProperty =
+            DependencyProperty.Register(
+                nameof(BackButtonVisibility),
+                typeof(Visibility),
+                typeof(TitleBar),
+                new PropertyMetadata(Visibility.Visible));
 
-        public static readonly DependencyProperty RefreshButtonVisibilityProperty = DependencyProperty.Register(
-           nameof(RefreshButtonVisibility),
-           typeof(Visibility),
-           typeof(TitleBar),
-           new PropertyMetadata(Visibility.Collapsed));
+        public static readonly DependencyProperty RefreshButtonVisibilityProperty =
+            DependencyProperty.Register(
+                nameof(RefreshButtonVisibility),
+                typeof(Visibility),
+                typeof(TitleBar),
+                new PropertyMetadata(Visibility.Collapsed));
 
         public string Title
         {

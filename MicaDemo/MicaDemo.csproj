@@ -141,8 +141,10 @@
     </Compile>
     <Compile Include="Helpers\Exceptions\ExceptionHandling.cs" />
     <Compile Include="Helpers\ThemeHelper.cs" />
+    <Compile Include="Helpers\ThreadSwitcher.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Helpers\Converters\TypeConverter.cs" />
+    <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="Pages\BlurPage.xaml.cs">
       <DependentUpon>BlurPage.xaml</DependentUpon>
     </Compile>

@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:MicaForUWP.Media"
+    NavigationCacheMode="Enabled"
     mc:Ignorable="d">
     <Page.Background>
         <ImageBrush ImageSource="/Assets/Photos/BigFourSummerHeat.jpg" Stretch="UniformToFill" />
@@ -35,7 +36,7 @@
             CornerRadius="8">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <control:TitleBar
@@ -46,7 +47,26 @@
                     BackButtonVisibility="Visible"
                     BackRequested="TitleBar_BackRequested"
                     BackgroundVisibility="Collapsed"
-                    RefreshButtonVisibility="Collapsed" />
+                    RefreshButtonVisibility="Collapsed">
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            HorizontalAlignment="Stretch"
+                            Click="Button_Click"
+                            Content="&#xE771;"
+                            Style="{StaticResource IconButtonStyle}"
+                            Tag="ChangeTheme"
+                            ToolTipService.ToolTip="Change Theme" />
+                        <Button
+                            Grid.Column="4"
+                            VerticalAlignment="Center"
+                            Click="Button_Click"
+                            Content="&#xE78B;"
+                            Style="{StaticResource IconButtonStyle}"
+                            Tag="NewWindow"
+                            ToolTipService.ToolTip="Open New Window"
+                            Visibility="{x:Bind NewWindowVisibility}" />
+                    </StackPanel>
+                </control:TitleBar>
                 <ScrollViewer Grid.Row="1">
                     <StackPanel Padding="18,0,18,8">
                         <Slider
@@ -73,10 +93,6 @@
                             HorizontalAlignment="Stretch"
                             Content="Always Use Fallback"
                             IsChecked="False" />
-                        <Button
-                            HorizontalAlignment="Stretch"
-                            Click="Button_Click"
-                            Content="Change Theme" />
                         <TextBlock Margin="0,4" Text="TintColor" />
                         <control:ColorPickerEx x:Name="TintColor" Color="{ThemeResource SolidBackgroundFillColorBase}" />
                     </StackPanel>

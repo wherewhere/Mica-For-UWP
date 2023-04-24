@@ -1,5 +1,4 @@
 ﻿using MicaDemo.Pages;
-using Windows.ApplicationModel.Core;
 using Windows.Foundation.Metadata;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -16,17 +15,16 @@ namespace MicaDemo
         public MainPage()
         {
             InitializeComponent();
-            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush"))
             {
                 MicaSymbol.Symbol = Symbol.Cancel;
-                ToolTipService.SetToolTip(Mica, "不支持Mica");
+                ToolTipService.SetToolTip(Mica, "Not Support Mica");
             }
             if (!ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.XamlCompositionBrushBase"))
             {
                 BlurSymbol.Symbol = Symbol.Cancel;
                 Mica.IsEnabled = Blur.IsEnabled = false;
-                ToolTipService.SetToolTip(Blur, "不支持高斯模糊");
+                ToolTipService.SetToolTip(Blur, "Not Support Blur");
             }
         }
 

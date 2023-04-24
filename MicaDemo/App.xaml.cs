@@ -4,6 +4,7 @@ using System;
 using System.Reflection;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -26,13 +27,6 @@ namespace MicaDemo
             UnhandledException += Application_UnhandledException;
         }
 
-        public static TEnum GetEnum<TEnum>(string text) where TEnum : struct
-        {
-            return !typeof(TEnum).GetTypeInfo().IsEnum
-                ? throw new InvalidOperationException("Generic parameter 'TEnum' must be an enum.")
-                : (TEnum)Enum.Parse(typeof(TEnum), text);
-        }
-
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。
         /// 将在启动应用程序以打开特定文件等情况下使用。
@@ -42,11 +36,12 @@ namespace MicaDemo
         {
             RegisterExceptionHandlingSynchronizationContext();
 
-
             // 不要在窗口已包含内容时重复应用程序初始化，
             // 只需确保窗口处于活动状态
             if (!(Window.Current.Content is Frame rootFrame))
             {
+                CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+
                 // 创建要充当导航上下文的框架，并导航到第一页
                 rootFrame = new Frame();
 
