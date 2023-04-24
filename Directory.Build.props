@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <FullTargets Condition="'$(FullTargets)' == ''">True</FullTargets>
+    <FullTargets Condition="'$(FullTargets)' == ''">true</FullTargets>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'native'">

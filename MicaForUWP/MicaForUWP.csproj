@@ -1,24 +1,27 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
+
   <PropertyGroup>
     <Authors>wherewhere</Authors>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <Copyright>Copyright © 2017 - 2023 wherewhere. All Rights Reserved.</Copyright>
-    <Deterministic>True</Deterministic>
-    <EmbedUntrackedSources>True</EmbedUntrackedSources>
+    <CsWinRTIncludes>Microsoft.Graphics.Canvas</CsWinRTIncludes>
+    <Deterministic>true</Deterministic>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <ExtrasUwpMetaPackageVersion>6.2.14</ExtrasUwpMetaPackageVersion>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <LangVersion>7.3</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <LangVersion Condition="'$(TargetFramework)' != 'net6.0-windows10.0.22621.0'">7.3</LangVersion>
+    <LangVersion Condition="'$(TargetFramework)' == 'net6.0-windows10.0.22621.0'">latest</LangVersion>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/wherewhere/Mica-For-UWP</RepositoryUrl>
     <TargetFramework Condition="'$(FullTargets)' != 'true'">uap10.0</TargetFramework>
-    <TargetFrameworks Condition="'$(FullTargets)' == 'true'">native;netcoreapp3.1;uap10.0;uap10.0.15138.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(FullTargets)' == 'true'">native;netcoreapp3.1;uap10.0;uap10.0.15138.0;net6.0-windows10.0.22621.0</TargetFrameworks>
     <Title>Mica UWP - Use Mica without WinUI</Title>
     <VersionPrefix>0.1.9</VersionPrefix>
     <Description>A UWP Library that implement an easy way to use Mica material without WinUI.</Description>
   </PropertyGroup>
 
   <PropertyGroup>
-    <IncludeSymbols>True</IncludeSymbols>
+    <IncludeSymbols>true</IncludeSymbols>
     <NuspecFile Condition="'$(FullTargets)' == 'true'">MicaForUWP.nuspec</NuspecFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/wherewhere/Mica-For-UWP</PackageProjectUrl>
