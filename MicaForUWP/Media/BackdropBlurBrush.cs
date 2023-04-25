@@ -22,6 +22,7 @@ namespace MicaForUWP.Media
     {
         private bool _isForce = true;
 
+        private Compositor Compositor;
         private CompositionBrush Brush;
         private ScalarKeyFrameAnimation TintOpacityFillAnimation;
         private ScalarKeyFrameAnimation HostOpacityZeroAnimation;
@@ -311,7 +312,12 @@ namespace MicaForUWP.Media
                     return;
                 }
 
-                Compositor Compositor = Window.Current.Compositor;
+                if (Window.Current != null)
+                {
+                    Compositor = Window.Current.Compositor;
+                }
+
+                if (Compositor == null) { return; }
 
                 if (!AlwaysUseFallback)
                 {
@@ -509,7 +515,13 @@ namespace MicaForUWP.Media
             }
             else if (CompositionBrush == Brush)
             {
-                Compositor Compositor = Window.Current.Compositor;
+                if (Window.Current != null)
+                {
+                    Compositor = Window.Current.Compositor;
+                }
+
+                if (Compositor == null) { return; }
+
                 CompositionScopedBatch scopedBatch = Compositor.CreateScopedBatch(CompositionBatchTypes.Animation);
                 TintOpacityFillAnimation.Direction = AnimationDirection.Normal;
                 HostOpacityZeroAnimation.Direction = AnimationDirection.Normal;
@@ -522,7 +534,13 @@ namespace MicaForUWP.Media
             }
             else
             {
-                Compositor Compositor = Window.Current.Compositor;
+                if (Window.Current != null)
+                {
+                    Compositor = Window.Current.Compositor;
+                }
+
+                if (Compositor == null) { return; }
+
                 CompositionBrush = Compositor.CreateColorBrush(FallbackColor);
             }
             _isForce = IsGotFocus;

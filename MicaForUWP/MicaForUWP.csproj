@@ -23,16 +23,18 @@
   <PropertyGroup>
     <IncludeSymbols>true</IncludeSymbols>
     <NuspecFile Condition="'$(FullTargets)' == 'true'">MicaForUWP.nuspec</NuspecFile>
+	<PackageIcon>Icon.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/wherewhere/Mica-For-UWP/main/logo.png</PackageIconUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/wherewhere/Mica-For-UWP</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/wherewhere/Mica-For-UWP/releases</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>UWP;Mica;WinUI</PackageTags>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <PackageIcon>logo.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup>
-    <NuspecProperties>id=$(AssemblyName);version=$(VersionPrefix);title=$(Title);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);license=$(PackageLicenseExpression);projectUrl=$(PackageProjectUrl);description=$(Description);copyright=$(Copyright);repositoryType=$(RepositoryType);repositoryUrl=$(PackageProjectUrl);repositoryCommit=$(RepositoryCommit);buildOutput=bin\$(Configuration)</NuspecProperties>
+    <NuspecProperties>id=$(AssemblyName);version=$(VersionPrefix);title=$(Title);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);license=$(PackageLicenseExpression);icon=$(PackageIcon);projectUrl=$(PackageProjectUrl);iconUrl=$(PackageIconUrl);description=$(Description);releaseNotes=$(PackageReleaseNotes);copyright=$(Copyright);repositoryType=$(RepositoryType);repositoryUrl=$(PackageProjectUrl);repositoryCommit=$(RepositoryCommit);buildOutput=bin\$(Configuration)</NuspecProperties>
   </PropertyGroup>
 
   <ItemGroup>
@@ -68,10 +70,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\logo.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    <None Include="..\logo.png" Pack="true" PackagePath="\Icon.png" />
     <None Remove="MicaForUWP.nuspec" />
   </ItemGroup>
 
