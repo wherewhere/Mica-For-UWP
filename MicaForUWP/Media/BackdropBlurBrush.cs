@@ -39,7 +39,7 @@ namespace MicaForUWP.Media
         public static DependencyProperty AlwaysUseFallbackProperty
 #if WINRT
             => _alwaysUseFallbackProperty;
-            
+
         private static readonly DependencyProperty _alwaysUseFallbackProperty
 #endif
             = DependencyProperty.Register(
@@ -70,7 +70,7 @@ namespace MicaForUWP.Media
         public static DependencyProperty BackgroundSourceProperty
 #if WINRT
             => _backgroundSourceProperty;
-            
+
         private static readonly DependencyProperty _backgroundSourceProperty
 #endif
             = DependencyProperty.Register(

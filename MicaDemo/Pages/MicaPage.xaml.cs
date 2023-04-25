@@ -1,7 +1,6 @@
 ﻿using MicaDemo.Helpers;
 using MicaForUWP.Media;
 using System;
-using System.Collections.Generic;
 using Windows.UI;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;

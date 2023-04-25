@@ -1,5 +1,7 @@
 ﻿using MicaDemo.Pages;
 using Windows.Foundation.Metadata;
+using Windows.Phone.UI.Input;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -15,6 +17,9 @@ namespace MicaDemo
         public MainPage()
         {
             InitializeComponent();
+            SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
+            if (ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
+            { HardwareButtons.BackPressed += System_BackPressed; }
             if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush"))
             {
                 MicaSymbol.Symbol = Symbol.Cancel;
@@ -26,6 +31,31 @@ namespace MicaDemo
                 Mica.IsEnabled = Blur.IsEnabled = false;
                 ToolTipService.SetToolTip(Blur, "Not Support Blur");
             }
+        }
+
+        private void System_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            if (!e.Handled)
+            {
+                e.Handled = TryGoBack();
+            }
+        }
+
+        private void System_BackPressed(object sender, BackPressedEventArgs e)
+        {
+            if (!e.Handled)
+            {
+                e.Handled = TryGoBack();
+            }
+        }
+
+        private bool TryGoBack(bool goBack = true)
+        {
+            if (!Dispatcher.HasThreadAccess || !Frame.CanGoBack)
+            { return false; }
+
+            if (goBack) { Frame.GoBack(); }
+            return true;
         }
 
         private void Mica_Click(object sender, RoutedEventArgs e)

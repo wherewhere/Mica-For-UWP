@@ -1,7 +1,6 @@
 ﻿using MicaDemo.Helpers;
 using MicaDemo.Helpers.Exceptions;
 using System;
-using System.Reflection;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;

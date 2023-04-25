@@ -22,6 +22,7 @@ namespace MicaForUWP.Media
     {
         private bool _isForce = true;
 
+        private Compositor Compositor;
         private CompositionBrush Brush;
         private ScalarKeyFrameAnimation TintOpacityFillAnimation;
         private ScalarKeyFrameAnimation HostOpacityZeroAnimation;
@@ -316,6 +317,13 @@ namespace MicaForUWP.Media
                     return;
                 }
 
+                if (Window.Current != null)
+                {
+                    Compositor = Window.Current.Compositor;
+                }
+
+                if (Compositor == null) { return; }
+
                 if (!AlwaysUseFallback)
                 {
                     ColorSourceEffect tintColorEffect = new ColorSourceEffect()
@@ -365,66 +373,66 @@ namespace MicaForUWP.Media
                         case BackgroundSource.Backdrop:
                             if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateBackdropBrush"))
                             {
-                                CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                                CompositionBrush = Compositor.CreateColorBrush(FallbackColor);
                                 return;
                             }
-                            backdrop = Window.Current.Compositor.CreateBackdropBrush();
+                            backdrop = Compositor.CreateBackdropBrush();
                             break;
                         case BackgroundSource.HostBackdrop:
                             if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
                             {
-                                CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                                CompositionBrush = Compositor.CreateColorBrush(FallbackColor);
                                 return;
                             }
-                            backdrop = Window.Current.Compositor.CreateHostBackdropBrush();
+                            backdrop = Compositor.CreateHostBackdropBrush();
                             break;
                         case BackgroundSource.WallpaperBackdrop:
 #if !NET
                             if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush"))
                             {
-                                backdrop = Window.Current.Compositor.TryCreateBlurredWallpaperBackdropBrush();
+                                backdrop = Compositor.TryCreateBlurredWallpaperBackdropBrush();
                             }
                             else
 #endif
                             if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
                             {
-                                backdrop = Window.Current.Compositor.CreateHostBackdropBrush();
+                                backdrop = Compositor.CreateHostBackdropBrush();
                             }
                             else
                             {
-                                CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                                CompositionBrush = Compositor.CreateColorBrush(FallbackColor);
                                 return;
                             }
                             break;
                         default:
-                            CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                            CompositionBrush = Compositor.CreateColorBrush(FallbackColor);
                             return;
                     }
 
-                    CompositionEffectBrush micaEffectBrush = Window.Current.Compositor.CreateEffectFactory(colorBlendEffect, new[] { "TintColor.Color", "TintOpacity.Opacity", "LuminosityColor.Color", "LuminosityOpacity.Opacity" }).CreateBrush();
+                    CompositionEffectBrush micaEffectBrush = Compositor.CreateEffectFactory(colorBlendEffect, new[] { "TintColor.Color", "TintOpacity.Opacity", "LuminosityColor.Color", "LuminosityOpacity.Opacity" }).CreateBrush();
                     micaEffectBrush.SetSourceParameter("BlurredWallpaperBackdrop", backdrop);
 
                     Brush = micaEffectBrush;
                     CompositionBrush = Brush;
 
-                    LinearEasingFunction line = Window.Current.Compositor.CreateLinearEasingFunction();
+                    LinearEasingFunction line = Compositor.CreateLinearEasingFunction();
 
                     TimeSpan duration = TintTransitionDuration == TimeSpan.Zero ? TimeSpan.FromTicks(10000) : TintTransitionDuration;
                     TimeSpan switchDuration = TimeSpan.FromMilliseconds(167);
 
-                    TintOpacityFillAnimation = Window.Current.Compositor.CreateScalarKeyFrameAnimation();
+                    TintOpacityFillAnimation = Compositor.CreateScalarKeyFrameAnimation();
                     TintOpacityFillAnimation.InsertExpressionKeyFrame(0f, "TintOpacity", line);
                     TintOpacityFillAnimation.InsertKeyFrame(1f, 1f, line);
                     TintOpacityFillAnimation.Duration = switchDuration;
                     TintOpacityFillAnimation.Target = "TintOpacity.Opacity";
 
-                    HostOpacityZeroAnimation = Window.Current.Compositor.CreateScalarKeyFrameAnimation();
+                    HostOpacityZeroAnimation = Compositor.CreateScalarKeyFrameAnimation();
                     HostOpacityZeroAnimation.InsertExpressionKeyFrame(0f, "LuminosityOpacity", line);
                     HostOpacityZeroAnimation.InsertKeyFrame(1f, 1f, line);
                     HostOpacityZeroAnimation.Duration = switchDuration;
                     HostOpacityZeroAnimation.Target = "LuminosityOpacity.Opacity";
 
-                    TintToFallBackAnimation = Window.Current.Compositor.CreateColorKeyFrameAnimation();
+                    TintToFallBackAnimation = Compositor.CreateColorKeyFrameAnimation();
                     TintToFallBackAnimation.InsertExpressionKeyFrame(0f, "TintColor", line);
                     TintToFallBackAnimation.InsertExpressionKeyFrame(1f, "FallbackColor", line);
                     TintToFallBackAnimation.Duration = duration;
@@ -445,7 +453,7 @@ namespace MicaForUWP.Media
                 }
                 else
                 {
-                    Brush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                    Brush = Compositor.CreateColorBrush(FallbackColor);
                     CompositionBrush = Brush;
                 }
             }
@@ -528,19 +536,33 @@ namespace MicaForUWP.Media
             }
             else if (CompositionBrush == Brush)
             {
-                CompositionScopedBatch scopedBatch = Window.Current.Compositor.CreateScopedBatch(CompositionBatchTypes.Animation);
+                if (Window.Current != null)
+                {
+                    Compositor = Window.Current.Compositor;
+                }
+
+                if (Compositor == null) { return; }
+
+                CompositionScopedBatch scopedBatch = Compositor.CreateScopedBatch(CompositionBatchTypes.Animation);
                 TintOpacityFillAnimation.Direction = AnimationDirection.Normal;
                 HostOpacityZeroAnimation.Direction = AnimationDirection.Normal;
                 TintToFallBackAnimation.Direction = AnimationDirection.Normal;
                 CompositionBrush.StartAnimation("TintOpacity.Opacity", TintOpacityFillAnimation);
                 CompositionBrush.StartAnimation("LuminosityOpacity.Opacity", HostOpacityZeroAnimation);
                 CompositionBrush.StartAnimation("TintColor.Color", TintToFallBackAnimation);
-                scopedBatch.Completed += (s, a) => CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                scopedBatch.Completed += (s, a) => CompositionBrush = Compositor.CreateColorBrush(FallbackColor);
                 scopedBatch.End();
             }
             else
             {
-                CompositionBrush = Window.Current.Compositor.CreateColorBrush(FallbackColor);
+                if (Window.Current != null)
+                {
+                    Compositor = Window.Current.Compositor;
+                }
+
+                if (Compositor == null) { return; }
+
+                CompositionBrush = Compositor.CreateColorBrush(FallbackColor);
             }
             _isForce = IsGotFocus;
         }
