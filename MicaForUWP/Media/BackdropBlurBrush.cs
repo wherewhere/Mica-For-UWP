@@ -342,14 +342,11 @@ namespace MicaForUWP.Media
                             backdrop = Compositor.CreateHostBackdropBrush();
                             break;
                         case BackgroundSource.WallpaperBackdrop:
-#if !NET
                             if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush"))
                             {
                                 backdrop = Compositor.TryCreateBlurredWallpaperBackdropBrush();
                             }
-                            else
-#endif
-                            if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
+                            else if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
                             {
                                 backdrop = Compositor.CreateHostBackdropBrush();
                             }

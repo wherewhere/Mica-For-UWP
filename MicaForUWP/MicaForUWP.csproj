@@ -22,7 +22,6 @@
 
   <PropertyGroup>
     <IncludeSymbols>true</IncludeSymbols>
-    <NuspecFile Condition="'$(FullTargets)' == 'true'">MicaForUWP.nuspec</NuspecFile>
 	<PackageIcon>Icon.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/wherewhere/Mica-For-UWP/main/logo.png</PackageIconUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -33,7 +32,8 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(FullTargets)' == 'true'">
+    <NuspecFile>MicaForUWP.nuspec</NuspecFile>
     <NuspecProperties>id=$(AssemblyName);version=$(VersionPrefix);title=$(Title);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);license=$(PackageLicenseExpression);icon=$(PackageIcon);projectUrl=$(PackageProjectUrl);iconUrl=$(PackageIconUrl);description=$(Description);releaseNotes=$(PackageReleaseNotes);copyright=$(Copyright);repositoryType=$(RepositoryType);repositoryUrl=$(PackageProjectUrl);repositoryCommit=$(RepositoryCommit);buildOutput=bin\$(Configuration)</NuspecProperties>
   </PropertyGroup>
 
@@ -55,8 +55,8 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows10.0.22621.0'">
-    <PackageReference Include="Dongle.WindowsSDK.NET" Version="10.0.22621.755" />
-    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.0.2" />
+    <PackageReference Include="Dongle.WindowsSDK.NET" Version="10.0.22621.756" />
+    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.0.3" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
@@ -72,6 +72,7 @@
   <ItemGroup>
     <None Include="..\logo.png" Pack="true" PackagePath="\Icon.png" />
     <None Remove="MicaForUWP.nuspec" />
+    <None Remove="MicaForUWP.targets" />
   </ItemGroup>
 
 </Project>
