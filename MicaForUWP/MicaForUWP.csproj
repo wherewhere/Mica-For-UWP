@@ -16,7 +16,7 @@
     <TargetFramework Condition="'$(FullTargets)' != 'true'">uap10.0</TargetFramework>
     <TargetFrameworks Condition="'$(FullTargets)' == 'true'">native;netcoreapp3.1;uap10.0;uap10.0.15138.0</TargetFrameworks>
     <Title>Mica UWP - Use Mica without WinUI</Title>
-    <VersionPrefix>0.1.9</VersionPrefix>
+    <VersionPrefix>0.1.10</VersionPrefix>
     <Description>A UWP Library that implement an easy way to use Mica material without WinUI.</Description>
   </PropertyGroup>
 
