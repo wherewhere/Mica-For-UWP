@@ -1,11 +1,13 @@
-﻿using MicaDemo.Helpers;
-using MicaDemo.Helpers.Exceptions;
+﻿using MicaDemo.Common;
+using MicaDemo.Helpers;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
+using Windows.Foundation.Metadata;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 namespace MicaDemo
@@ -33,11 +35,17 @@ namespace MicaDemo
         /// <param name="e">有关启动请求和过程的详细信息。</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            RegisterExceptionHandlingSynchronizationContext();
+            if (!isLoaded)
+            {
+                RegisterExceptionHandlingSynchronizationContext();
+                isLoaded = true;
+            }
+
+            Window window = Window.Current;
 
             // 不要在窗口已包含内容时重复应用程序初始化，
             // 只需确保窗口处于活动状态
-            if (!(Window.Current.Content is Frame rootFrame))
+            if (!(window.Content is Frame rootFrame))
             {
                 CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
 
@@ -52,21 +60,29 @@ namespace MicaDemo
                 }
 
                 // 将框架放在当前窗口中
-                Window.Current.Content = rootFrame;
+                window.Content = rootFrame;
+
+                WindowHelper.TrackWindow(window);
+                ThemeHelper.Initialize(window);
             }
 
-            if (e.PrelaunchActivated == false)
+            if (!e.PrelaunchActivated)
             {
+                if (ApiInformation.IsMethodPresent("Windows.ApplicationModel.Core.CoreApplication", "EnablePrelaunch"))
+                {
+                    CoreApplication.EnablePrelaunch(true);
+                }
+
                 if (rootFrame.Content == null)
                 {
                     // 当导航堆栈尚未还原时，导航到第一页，
                     // 并通过将所需信息作为导航参数传入来配置
                     // 参数
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(MainPage), e.Arguments, new DrillInNavigationTransitionInfo());
                 }
-                ThemeHelper.Initialize();
+
                 // 确保当前窗口处于活动状态
-                Window.Current.Activate();
+                window.Activate();
             }
         }
 
@@ -106,6 +122,8 @@ namespace MicaDemo
                 .UnhandledException += SynchronizationContext_UnhandledException;
         }
 
-        private void SynchronizationContext_UnhandledException(object sender, Helpers.Exceptions.UnhandledExceptionEventArgs e) => e.Handled = true;
+        private void SynchronizationContext_UnhandledException(object sender, Common.UnhandledExceptionEventArgs e) => e.Handled = true;
+
+        private bool isLoaded;
     }
 }

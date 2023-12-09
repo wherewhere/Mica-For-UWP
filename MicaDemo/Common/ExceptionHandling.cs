@@ -2,7 +2,7 @@
 using System.Threading;
 using Windows.UI.Xaml.Controls;
 
-namespace MicaDemo.Helpers.Exceptions
+namespace MicaDemo.Common
 {
     /// <summary>
     /// Wrapper around a standard synchronization context, that catches any unhandled exceptions.

@@ -33,16 +33,8 @@ namespace MicaForUWP.Media
         /// <summary>
         /// Identifies the <see cref="AlwaysUseFallback"/> dependency property.
         /// </summary>
-#if !WINRT
-        readonly
-#endif
-        public static DependencyProperty AlwaysUseFallbackProperty
-#if WINRT
-            => _alwaysUseFallbackProperty;
-
-        private static readonly DependencyProperty _alwaysUseFallbackProperty
-#endif
-            = DependencyProperty.Register(
+        public static DependencyProperty AlwaysUseFallbackProperty { get; } =
+            DependencyProperty.Register(
                 nameof(AlwaysUseFallback),
                 typeof(bool),
                 typeof(BackdropBlurBrush),
@@ -64,16 +56,8 @@ namespace MicaForUWP.Media
         /// <summary>
         /// Identifies the <see cref="BackgroundSource"/> dependency property.
         /// </summary>
-#if !WINRT
-        readonly
-#endif
-        public static DependencyProperty BackgroundSourceProperty
-#if WINRT
-            => _backgroundSourceProperty;
-
-        private static readonly DependencyProperty _backgroundSourceProperty
-#endif
-            = DependencyProperty.Register(
+        public static DependencyProperty BackgroundSourceProperty { get; } =
+            DependencyProperty.Register(
                 nameof(BackgroundSource),
                 typeof(BackgroundSource),
                 typeof(BackdropBlurBrush),
@@ -108,16 +92,8 @@ namespace MicaForUWP.Media
         /// <summary>
         /// Identifies the <see cref="TintColor"/> dependency property.
         /// </summary>
-#if !WINRT
-        readonly
-#endif
-        public static DependencyProperty TintColorProperty
-#if WINRT
-            => _tintColorProperty;
-
-        private static readonly DependencyProperty _tintColorProperty
-#endif
-            = DependencyProperty.Register(
+        public static DependencyProperty TintColorProperty { get; } =
+            DependencyProperty.Register(
                 nameof(TintColor),
                 typeof(Color),
                 typeof(BackdropBlurBrush),
@@ -160,16 +136,8 @@ namespace MicaForUWP.Media
         /// <summary>
         /// Identifies the <see cref="Amount"/> dependency property.
         /// </summary>
-#if !WINRT
-        readonly
-#endif
-        public static DependencyProperty AmountProperty
-#if WINRT
-            => _amountProperty;
-
-        private static readonly DependencyProperty _amountProperty
-#endif
-            = DependencyProperty.Register(
+        public static DependencyProperty AmountProperty { get; } =
+            DependencyProperty.Register(
                 nameof(Amount),
                 typeof(double),
                 typeof(BackdropBlurBrush),
@@ -208,16 +176,8 @@ namespace MicaForUWP.Media
         /// <summary>
         /// Identifies the <see cref="TintOpacity"/> dependency property.
         /// </summary>
-#if !WINRT
-        readonly
-#endif
-        public static DependencyProperty TintOpacityProperty
-#if WINRT
-            => _tintOpacityProperty;
-
-        private static readonly DependencyProperty _tintOpacityProperty
-#endif
-            = DependencyProperty.Register(
+        public static DependencyProperty TintOpacityProperty { get; } =
+            DependencyProperty.Register(
                 nameof(TintOpacity),
                 typeof(double),
                 typeof(BackdropBlurBrush),
@@ -265,16 +225,8 @@ namespace MicaForUWP.Media
         /// <summary>
         /// Identifies the <see cref="TintTransitionDuration"/> dependency property.
         /// </summary>
-#if !WINRT
-        readonly
-#endif
-        public static DependencyProperty TintTransitionDurationProperty
-#if WINRT
-            => _tintTransitionDurationProperty;
-
-        private static readonly DependencyProperty _tintTransitionDurationProperty
-#endif
-            = DependencyProperty.Register(
+        public static DependencyProperty TintTransitionDurationProperty { get; } =
+            DependencyProperty.Register(
                 nameof(TintTransitionDuration),
                 typeof(TimeSpan),
                 typeof(BackdropBlurBrush),
@@ -294,9 +246,7 @@ namespace MicaForUWP.Media
         /// <summary>
         /// Initializes a new instance of the <see cref="BackdropBlurBrush"/> class.
         /// </summary>
-        public BackdropBlurBrush()
-        {
-        }
+        public BackdropBlurBrush() { }
 
         /// <summary>
         /// Initializes the Composition Brush.

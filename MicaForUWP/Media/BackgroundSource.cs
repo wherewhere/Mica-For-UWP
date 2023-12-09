@@ -1,5 +1,5 @@
-﻿using Windows.Foundation.Metadata;
-using Windows.Foundation;
+﻿using Windows.Foundation;
+using Windows.Foundation.Metadata;
 
 namespace MicaForUWP.Media
 {

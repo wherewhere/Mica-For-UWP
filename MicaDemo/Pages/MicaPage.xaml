@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:control="using:MicaDemo.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="using:MicaDemo.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:MicaForUWP.Media"
     NavigationCacheMode="Enabled"
@@ -12,20 +13,20 @@
         <ImageBrush ImageSource="/Assets/Photos/BigFourSummerHeat.jpg" Stretch="UniformToFill" />
     </Page.Background>
     <Grid>
-        <Grid.Background>
-            <media:BackdropMicaBrush
-                AlwaysUseFallback="{Binding IsChecked, ElementName=AlwaysUseFallback, Mode=OneWay}"
-                BackgroundSource="{Binding SelectedItem, ElementName=BackgroundSource, Mode=OneWay, Converter={StaticResource TypeConverter}}"
-                FallbackColor="{StaticResource SolidBackgroundFillColorBase}"
-                LuminosityOpacity="{Binding Value, ElementName=LuminosityOpacity, Mode=OneWay}"
-                TintColor="{Binding Color, ElementName=TintColor, Mode=OneWay}"
-                TintOpacity="{Binding Value, ElementName=TintOpacity, Mode=OneWay}" />
-        </Grid.Background>
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition />
             </TransitionCollection>
         </Grid.ChildrenTransitions>
+        <Grid.Background>
+            <media:BackdropMicaBrush
+                AlwaysUseFallback="{Binding IsChecked, ElementName=AlwaysUseFallback, Mode=OneWay}"
+                BackgroundSource="{Binding SelectedValue, ElementName=BackgroundSource, Mode=OneWay}"
+                FallbackColor="{StaticResource SolidBackgroundFillColorBase}"
+                LuminosityOpacity="{x:Bind LuminosityOpacity.Value, Mode=OneWay}"
+                TintColor="{x:Bind TintColor.Color, Mode=OneWay}"
+                TintOpacity="{x:Bind TintOpacity.Value, Mode=OneWay}" />
+        </Grid.Background>
         <Border
             Margin="{x:Bind ScrollViewerMargin}"
             HorizontalAlignment="Center"
@@ -63,8 +64,21 @@
                             Content="&#xE78B;"
                             Style="{StaticResource IconButtonStyle}"
                             Tag="NewWindow"
-                            ToolTipService.ToolTip="Open New Window"
-                            Visibility="{x:Bind NewWindowVisibility}" />
+                            ToolTipService.ToolTip="Open New Window">
+                            <helpers:UIElementHelper.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem
+                                        Click="Button_Click"
+                                        IsEnabled="{x:Bind IsAppWindowSupported}"
+                                        Tag="NewAppWindow"
+                                        Text="Open New App Window">
+                                        <helpers:UIElementHelper.Icon>
+                                            <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE78B;" />
+                                        </helpers:UIElementHelper.Icon>
+                                    </MenuFlyoutItem>
+                                </MenuFlyout>
+                            </helpers:UIElementHelper.ContextFlyout>
+                        </Button>
                     </StackPanel>
                 </control:TitleBar>
                 <ScrollViewer Grid.Row="1">

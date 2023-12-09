@@ -133,17 +133,19 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\Enumerable.cs" />
     <Compile Include="Controls\ColorPickerEx.xaml.cs">
       <DependentUpon>ColorPickerEx.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TitleBar.xaml.cs">
       <DependentUpon>TitleBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\Exceptions\ExceptionHandling.cs" />
+    <Compile Include="Common\ExceptionHandling.cs" />
     <Compile Include="Helpers\ThemeHelper.cs" />
-    <Compile Include="Helpers\ThreadSwitcher.cs" />
+    <Compile Include="Common\ThreadSwitcher.cs" />
+    <Compile Include="Helpers\UIElementHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
-    <Compile Include="Helpers\Converters\TypeConverter.cs" />
+    <Compile Include="Common\WeakEvent.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="Pages\BlurPage.xaml.cs">
       <DependentUpon>BlurPage.xaml</DependentUpon>
