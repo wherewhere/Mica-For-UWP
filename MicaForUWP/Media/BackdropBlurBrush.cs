@@ -318,13 +318,23 @@ namespace MicaForUWP.Media
                         MultiplyAmount = 0f,
                         Source1Amount = (float)(1f - TintOpacity),
                         Source2Amount = (float)TintOpacity,
-                        Source1 = new GaussianBlurEffect
+                        Source1 = new CompositeEffect
                         {
-                            Name = "Blur",
-                            BlurAmount = (float)Amount,
-                            BorderMode = EffectBorderMode.Hard,
-                            Optimization = EffectOptimization.Balanced,
-                            Source = new CompositionEffectSourceParameter("backdrop"),
+                            Sources =
+                            {
+                                new ColorSourceEffect
+                                {
+                                    Color = Color.FromArgb(255, 0, 0, 0),
+                                },
+                                new GaussianBlurEffect
+                                {
+                                    Name = "Blur",
+                                    BlurAmount = (float)Amount,
+                                    BorderMode = EffectBorderMode.Hard,
+                                    Optimization = EffectOptimization.Balanced,
+                                    Source = new CompositionEffectSourceParameter("backdrop"),
+                                }
+                            }
                         },
                         Source2 = new ColorSourceEffect
                         {
