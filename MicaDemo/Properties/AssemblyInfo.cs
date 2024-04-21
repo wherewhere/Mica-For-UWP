@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MicaDemo")]
-[assembly: AssemblyCopyright("Copyright © 2017 - 2023 wherewhere. All Rights Reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2017 - 2024 wherewhere. All Rights Reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -1,4 +1,5 @@
 ﻿using MicaDemo.Common;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
@@ -19,8 +20,20 @@ namespace MicaDemo.Helpers
         // Keep reference so it does not get optimized/garbage collected
         public static UISettings UISettings { get; } = new UISettings();
         public static AccessibilitySettings AccessibilitySettings { get; } = new AccessibilitySettings();
+        
+        #region UISettingChanged
 
-        public static WeakEvent<bool> UISettingChanged { get; } = new WeakEvent<bool>();
+        private static readonly WeakEvent<bool> actions = new WeakEvent<bool>();
+
+        public static event Action<bool> UISettingChanged
+        {
+            add => actions.Add(value);
+            remove => actions.Remove(value);
+        }
+
+        public static void InvokeUISettingChanged(bool value) => actions.Invoke(value);
+
+        #endregion
 
         #region RootTheme
 
@@ -62,7 +75,7 @@ namespace MicaDemo.Helpers
             }));
 
             UpdateSystemCaptionButtonColors();
-            UISettingChanged.Invoke(await IsDarkThemeAsync());
+            InvokeUISettingChanged(await IsDarkThemeAsync());
         }
 
         #endregion
@@ -96,7 +109,7 @@ namespace MicaDemo.Helpers
         private static async void UISettings_ColorValuesChanged(UISettings sender, object args)
         {
             UpdateSystemCaptionButtonColors();
-            UISettingChanged.Invoke(await IsDarkThemeAsync());
+            InvokeUISettingChanged(await IsDarkThemeAsync());
         }
 
         public static async Task<bool> IsDarkThemeAsync()

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Authors>wherewhere</Authors>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-    <Copyright>Copyright © 2017 - 2023 wherewhere. All Rights Reserved.</Copyright>
+    <Copyright>Copyright © 2017 - 2024 wherewhere. All Rights Reserved.</Copyright>
     <CsWinRTIncludes>Microsoft.Graphics.Canvas</CsWinRTIncludes>
     <Deterministic>true</Deterministic>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
