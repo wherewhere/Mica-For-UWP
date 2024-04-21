@@ -324,7 +324,7 @@ namespace MicaForUWP.Media
                             {
                                 new ColorSourceEffect
                                 {
-                                    Color = Color.FromArgb(255, 0, 0, 0),
+                                    Color = Colors.Black,
                                 },
                                 new GaussianBlurEffect
                                 {
