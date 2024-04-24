@@ -324,7 +324,7 @@ namespace MicaForUWP.Media
                             {
                                 new ColorSourceEffect
                                 {
-                                    Color = Colors.Black,
+                                    Color = Colors.Black
                                 },
                                 new GaussianBlurEffect
                                 {
@@ -332,7 +332,7 @@ namespace MicaForUWP.Media
                                     BlurAmount = (float)Amount,
                                     BorderMode = EffectBorderMode.Hard,
                                     Optimization = EffectOptimization.Balanced,
-                                    Source = new CompositionEffectSourceParameter("backdrop"),
+                                    Source = new CompositionEffectSourceParameter("backdrop")
                                 }
                             }
                         },
