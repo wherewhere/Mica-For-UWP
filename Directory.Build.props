@@ -1,9 +1,5 @@
 <Project>
 
-  <PropertyGroup>
-    <FullTargets Condition="'$(FullTargets)' == ''">true</FullTargets>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(TargetFramework)' == 'native'">
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <DebugType>Full</DebugType>

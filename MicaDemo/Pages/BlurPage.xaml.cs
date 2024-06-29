@@ -3,6 +3,7 @@ using MicaDemo.Helpers;
 using MicaForUWP.Media;
 using System;
 using Windows.ApplicationModel.Core;
+using Windows.Foundation.Metadata;
 using Windows.UI;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
@@ -22,19 +23,22 @@ namespace MicaDemo.Pages
         private readonly Thickness ScrollViewerMargin = UIHelper.ScrollViewerMargin;
         private readonly Array BackgroundSources = Enum.GetValues(typeof(BackgroundSource));
         private readonly bool IsAppWindowSupported = WindowHelper.IsAppWindowSupported;
+        private readonly bool IsActualThemeChangedSupported = ApiInformation.IsEventPresent("Windows.UI.Xaml.FrameworkElement", "ActualThemeChanged");
 
         public BlurPage() => InitializeComponent();
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            ActualThemeChanged += OnActualThemeChanged;
+            if (IsActualThemeChangedSupported)
+            { ActualThemeChanged += OnActualThemeChanged; }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-            ActualThemeChanged -= OnActualThemeChanged;
+            if (IsActualThemeChangedSupported)
+            { ActualThemeChanged -= OnActualThemeChanged; }
         }
 
         private async void OnActualThemeChanged(FrameworkElement sender, object args)

@@ -1,4 +1,8 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
+ 
+  <PropertyGroup>
+    <FullTargets Condition="'$(FullTargets)' == ''">true</FullTargets>
+  </PropertyGroup>
 
   <PropertyGroup>
     <Authors>wherewhere</Authors>
@@ -7,22 +11,25 @@
     <CsWinRTIncludes>Microsoft.Graphics.Canvas</CsWinRTIncludes>
     <Deterministic>true</Deterministic>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <ExtrasUwpMetaPackageVersion>6.2.14</ExtrasUwpMetaPackageVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <LangVersion Condition="'$(TargetFramework)' != 'net6.0-windows10.0.22000.0'">7.3</LangVersion>
-    <LangVersion Condition="'$(TargetFramework)' == 'net6.0-windows10.0.22000.0'">latest</LangVersion>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/wherewhere/Mica-For-UWP</RepositoryUrl>
-    <TargetFramework Condition="'$(FullTargets)' != 'true'">uap10.0</TargetFramework>
-    <TargetFrameworks Condition="'$(FullTargets)' == 'true'">native;netcoreapp3.1;uap10.0;uap10.0.15138.0</TargetFrameworks>
     <Title>Mica UWP - Use Mica without WinUI</Title>
     <VersionPrefix>0.1.10</VersionPrefix>
     <Description>A UWP Library that implement an easy way to use Mica material without WinUI.</Description>
   </PropertyGroup>
 
   <PropertyGroup>
+    <ExtrasUwpMetaPackageVersion>6.2.14</ExtrasUwpMetaPackageVersion>
+    <LangVersion Condition="'$(TargetFramework)' != 'net6.0-windows10.0.22000.0'">7.3</LangVersion>
+    <LangVersion Condition="'$(TargetFramework)' == 'net6.0-windows10.0.22000.0'">latest</LangVersion>
+    <TargetFramework Condition="'$(FullTargets)' != 'true'">uap10.0</TargetFramework>
+    <TargetFrameworks Condition="'$(FullTargets)' == 'true'">native;netcoreapp3.1;uap10.0;uap10.0.15138.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <IncludeSymbols>true</IncludeSymbols>
-	<PackageIcon>Icon.png</PackageIcon>
+    <PackageIcon>Icon.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/wherewhere/Mica-For-UWP/main/logo.png</PackageIconUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/wherewhere/Mica-For-UWP</PackageProjectUrl>
@@ -46,7 +53,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.22621.3233" />
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.26100.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows10.0.22000.0'">
