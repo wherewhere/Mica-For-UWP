@@ -15,7 +15,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/wherewhere/Mica-For-UWP</RepositoryUrl>
     <Title>Mica UWP - Use Mica without WinUI</Title>
-    <VersionPrefix>0.1.10</VersionPrefix>
+    <VersionPrefix>0.1.11</VersionPrefix>
     <Description>A UWP Library that implement an easy way to use Mica material without WinUI.</Description>
   </PropertyGroup>
 
@@ -33,6 +33,7 @@
     <PackageIconUrl>https://raw.githubusercontent.com/wherewhere/Mica-For-UWP/main/logo.png</PackageIconUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/wherewhere/Mica-For-UWP</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>https://github.com/wherewhere/Mica-For-UWP/releases</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>UWP;Mica;WinUI</PackageTags>
@@ -41,7 +42,7 @@
 
   <PropertyGroup Condition="'$(FullTargets)' == 'true'">
     <NuspecFile>MicaForUWP.nuspec</NuspecFile>
-    <NuspecProperties>id=$(AssemblyName);version=$(VersionPrefix);title=$(Title);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);license=$(PackageLicenseExpression);icon=$(PackageIcon);projectUrl=$(PackageProjectUrl);iconUrl=$(PackageIconUrl);description=$(Description);releaseNotes=$(PackageReleaseNotes);copyright=$(Copyright);repositoryType=$(RepositoryType);repositoryUrl=$(PackageProjectUrl);repositoryCommit=$(RepositoryCommit);buildOutput=bin\$(Configuration)</NuspecProperties>
+    <NuspecProperties>id=$(AssemblyName);version=$(VersionPrefix);title=$(Title);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);license=$(PackageLicenseExpression);icon=$(PackageIcon);readme=$(PackageReadmeFile);projectUrl=$(PackageProjectUrl);iconUrl=$(PackageIconUrl);description=$(Description);releaseNotes=$(PackageReleaseNotes);copyright=$(Copyright);repositoryType=$(RepositoryType);repositoryUrl=$(PackageProjectUrl);repositoryCommit=$(RepositoryCommit);buildOutput=bin\$(Configuration)</NuspecProperties>
   </PropertyGroup>
 
   <ItemGroup>
@@ -73,6 +74,7 @@
 
   <ItemGroup>
     <None Include="..\logo.png" Pack="true" PackagePath="\Icon.png" />
+    <None Include="..\README.md" Pack="True" PackagePath="\README.md"/>
     <None Remove="MicaForUWP.nuspec" />
     <None Remove="MicaForUWP.targets" />
   </ItemGroup>

@@ -8,6 +8,7 @@
     <requireLicenseAcceptance>$requireLicenseAcceptance$</requireLicenseAcceptance>
     <license type="expression">$license$</license>
     <icon>$icon$</icon>
+    <readme>$readme$</readme>
     <projectUrl>$projectUrl$</projectUrl>
     <iconUrl>$iconUrl$</iconUrl>
     <description>$description$</description>
@@ -33,6 +34,7 @@
   </metadata>
   <files>
     <file src="..\logo.png" target="Icon.png" />
+    <file src="..\README.md" target="README.md" />
     <file src="MicaForUWP.targets" target="build\native\MicaForUWP.targets" />
     <file src="$buildOutput$\native\MicaForUWP.*" target="lib\native\" />
     <file src="$buildOutput$\netcoreapp3.1\MicaForUWP.*" target="lib\netcoreapp3.1\" />
