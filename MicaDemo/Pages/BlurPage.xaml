@@ -58,6 +58,27 @@
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE890;" />
                     </helpers:UIElementHelper.Icon>
                 </MenuFlyoutItem>
+                <MenuFlyoutSubItem Text="Backgroud Image">
+                    <helpers:UIElementHelper.Icon>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xEB9F;" />
+                    </helpers:UIElementHelper.Icon>
+                    <MenuFlyoutItem
+                        Click="Button_Click"
+                        Tag="ChangeImage"
+                        Text="Change Backgroud Image">
+                        <helpers:UIElementHelper.Icon>
+                            <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE8AB;" />
+                        </helpers:UIElementHelper.Icon>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutItem
+                        Click="Button_Click"
+                        Tag="RemoveImage"
+                        Text="Remove Backgroud Image">
+                        <helpers:UIElementHelper.Icon>
+                            <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE74D;" />
+                        </helpers:UIElementHelper.Icon>
+                    </MenuFlyoutItem>
+                </MenuFlyoutSubItem>
                 <MenuFlyoutSubItem Text="Open New Window">
                     <helpers:UIElementHelper.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE78B;" />
@@ -126,6 +147,27 @@
                                 Style="{StaticResource IconButtonStyle}"
                                 Tag="ChangeTheme"
                                 ToolTipService.ToolTip="Change Theme" />
+                            <Button
+                                HorizontalAlignment="Stretch"
+                                Click="Button_Click"
+                                Content="&#xEB9F;"
+                                Style="{StaticResource IconButtonStyle}"
+                                Tag="ChangeImage"
+                                ToolTipService.ToolTip="Change Backgroud Image">
+                                <helpers:UIElementHelper.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem
+                                            Click="Button_Click"
+                                            IsEnabled="{x:Bind Provider.IsAppWindowSupported}"
+                                            Tag="RemoveImage"
+                                            Text="Remove Backgroud Image">
+                                            <helpers:UIElementHelper.Icon>
+                                                <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE74D;" />
+                                            </helpers:UIElementHelper.Icon>
+                                        </MenuFlyoutItem>
+                                    </MenuFlyout>
+                                </helpers:UIElementHelper.ContextFlyout>
+                            </Button>
                             <ToggleButton
                                 HorizontalAlignment="Stretch"
                                 Content="&#xE744;"

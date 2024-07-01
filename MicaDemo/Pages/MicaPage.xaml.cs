@@ -118,6 +118,12 @@ namespace MicaDemo.Pages
                 case "ChangeTheme":
                     _ = ThemeHelper.IsDarkThemeAsync().ContinueWith(x => ThemeHelper.SetRootThemeAsync(x.Result ? ElementTheme.Light : ElementTheme.Dark));
                     break;
+                case "ChangeImage":
+                    _ = Provider.PickImageAsync();
+                    return;
+                case "RemoveImage":
+                    Provider.BackgroundImage = null;
+                    break;
                 case "HideSetting":
                     IsHideCard = true;
                     break;

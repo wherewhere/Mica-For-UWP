@@ -4,18 +4,25 @@ using MicaForUWP.Media;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Windows.Foundation.Metadata;
+using Windows.Storage.Pickers;
+using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.Graphics.Imaging;
+using Windows.Storage.Streams;
 
 namespace MicaDemo.ViewModels
 {
     public class BrushViewModel : INotifyPropertyChanged
     {
+        private readonly static string[] imageTypes = new[] { ".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif", ".heif", ".heic" };
+
         public Thickness ScrollViewerMargin { get; } = UIHelper.ScrollViewerMargin;
         public Array BackgroundSources { get; } = Enum.GetValues(typeof(BackgroundSource));
         public bool IsAppWindowSupported { get; } = WindowHelper.IsAppWindowSupported;
@@ -111,6 +118,48 @@ namespace MicaDemo.ViewModels
         {
             Dispatcher = dispatcher;
             BackgroundImage = new BitmapImage(new Uri("ms-appx:///Assets/Photos/BigFourSummerHeat.jpg"));
+        }
+
+        public async Task PickImageAsync()
+        {
+            FileOpenPicker fileOpen = new FileOpenPicker();
+            fileOpen.FileTypeFilter.AddRange(imageTypes);
+            fileOpen.SuggestedStartLocation = PickerLocationId.ComputerFolder;
+
+            StorageFile file = await fileOpen.PickSingleFileAsync();
+            if (file != null)
+            {
+                using (IRandomAccessStreamWithContentType stream = await file.OpenReadAsync())
+                {
+                    BitmapDecoder imageDecoder = await BitmapDecoder.CreateAsync(stream);
+                    SoftwareBitmap softwareImage = await imageDecoder.GetSoftwareBitmapAsync();
+                    try
+                    {
+                        WriteableBitmap writeableImage = new WriteableBitmap((int)imageDecoder.PixelWidth, (int)imageDecoder.PixelHeight);
+                        await writeableImage.SetSourceAsync(stream);
+                        BackgroundImage = writeableImage;
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            using (InMemoryRandomAccessStream random = new InMemoryRandomAccessStream())
+                            {
+                                BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, random);
+                                encoder.SetSoftwareBitmap(softwareImage);
+                                await encoder.FlushAsync();
+                                WriteableBitmap writeableImage = new WriteableBitmap((int)imageDecoder.PixelWidth, (int)imageDecoder.PixelHeight);
+                                await writeableImage.SetSourceAsync(random);
+                                BackgroundImage = writeableImage;
+                            }
+                        }
+                        catch
+                        {
+                            BackgroundImage = null;
+                        }
+                    }
+                }
+            }
         }
     }
 
