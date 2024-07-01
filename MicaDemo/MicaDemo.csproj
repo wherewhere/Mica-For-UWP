@@ -78,7 +78,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\ARM64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP;NETCORE463</DefineConstants>
     <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
@@ -90,7 +90,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM64'">
     <OutputPath>bin\ARM64\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP;NETCORE463</DefineConstants>
     <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
@@ -141,6 +141,9 @@
       <DependentUpon>TitleBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\ExceptionHandling.cs" />
+    <Compile Include="Helpers\Converters\BoolToObjectConverter.cs" />
+    <Compile Include="Helpers\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Helpers\Converters\ConverterTools.cs" />
     <Compile Include="Helpers\ThemeHelper.cs" />
     <Compile Include="Common\ThreadSwitcher.cs" />
     <Compile Include="Helpers\UIElementHelper.cs" />
@@ -157,6 +160,7 @@
       <DependentUpon>MicaPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\BrushViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

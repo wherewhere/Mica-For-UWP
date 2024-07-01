@@ -5,6 +5,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation.Metadata;
+using Windows.System.Profile;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
@@ -26,6 +27,10 @@ namespace MicaDemo
             InitializeComponent();
             Suspending += OnSuspending;
             UnhandledException += Application_UnhandledException;
+            if (ApiInformation.IsEnumNamedValuePresent("Windows.UI.Xaml.FocusVisualKind", "Reveal") && AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Xbox")
+            {
+                FocusVisualKind = FocusVisualKind.Reveal;
+            }
         }
 
         /// <summary>

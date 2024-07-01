@@ -27,8 +27,8 @@
         <Grid Height="40" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
@@ -40,6 +40,7 @@
                 Content="&#xE72B;"
                 IsEnabled="{x:Bind IsBackEnable, Mode=OneWay}"
                 Style="{StaticResource IconButtonStyle}"
+                ToolTipService.ToolTip="Back"
                 Visibility="{x:Bind BackButtonVisibility, Mode=OneWay}" />
             <TextBlock
                 x:Name="TitleBlock"
@@ -72,6 +73,7 @@
                 Click="RefreshButton_Click"
                 Content="&#xE72C;"
                 Style="{StaticResource IconButtonStyle}"
+                ToolTipService.ToolTip="Refresh"
                 Visibility="{x:Bind RefreshButtonVisibility, Mode=OneWay}" />
         </Grid>
     </Grid>

@@ -114,7 +114,7 @@ namespace MicaDemo.Helpers
         /// </summary>
         /// <param name="control">The element from which to read the property value.</param>
         /// <returns>The graphic content of the menu flyout item.</returns>
-        public static IconElement GetIcon(MenuFlyoutItem control)
+        public static IconElement GetIcon(MenuFlyoutItemBase control)
         {
             return (IconElement)control.GetValue(IconProperty);
         }
@@ -124,7 +124,7 @@ namespace MicaDemo.Helpers
         /// </summary>
         /// <param name="control">The element on which to set the attached property.</param>
         /// <param name="value">The property value to set.</param>
-        public static void SetIcon(MenuFlyoutItem control, IconElement value)
+        public static void SetIcon(MenuFlyoutItemBase control, IconElement value)
         {
             control.SetValue(IconProperty, value);
         }

@@ -21,7 +21,7 @@ namespace MicaDemo.Helpers
         // Keep reference so it does not get optimized/garbage collected
         public static UISettings UISettings { get; } = new UISettings();
         public static AccessibilitySettings AccessibilitySettings { get; } = new AccessibilitySettings();
-        
+
         #region UISettingChanged
 
         private static readonly WeakEvent<bool> actions = new WeakEvent<bool>();
@@ -66,9 +66,9 @@ namespace MicaDemo.Helpers
                     rootElement.RequestedTheme = value;
                 }
 
-                if (WindowHelper.IsAppWindowSupported && WindowHelper.ActiveAppWindows.TryGetValue(window.Dispatcher, out HashSet<AppWindow> appWindows))
+                if (WindowHelper.IsAppWindowSupported && WindowHelper.ActiveAppWindows.TryGetValue(window.Dispatcher, out Dictionary<XamlRoot, AppWindow> appWindows))
                 {
-                    foreach (FrameworkElement element in appWindows.Select(x => x.GetXamlRootForWindow()).OfType<FrameworkElement>())
+                    foreach (FrameworkElement element in appWindows.Keys.Select(x => x.Content).OfType<FrameworkElement>())
                     {
                         element.RequestedTheme = value;
                     }
@@ -144,9 +144,9 @@ namespace MicaDemo.Helpers
 
                 CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = IsExtendsTitleBar;
 
-                if (WindowHelper.IsAppWindowSupported && WindowHelper.ActiveAppWindows.TryGetValue(window.Dispatcher, out HashSet<AppWindow> appWindows))
+                if (WindowHelper.IsAppWindowSupported && WindowHelper.ActiveAppWindows.TryGetValue(window.Dispatcher, out Dictionary<XamlRoot, AppWindow> appWindows))
                 {
-                    foreach (AppWindow appWindow in appWindows)
+                    foreach (AppWindow appWindow in appWindows.Values)
                     {
                         appWindow.TitleBar.ExtendsContentIntoTitleBar = IsExtendsTitleBar;
                     }
@@ -182,9 +182,9 @@ namespace MicaDemo.Helpers
                     TitleBar.ButtonBackgroundColor = TitleBar.ButtonInactiveBackgroundColor = ExtendViewIntoTitleBar ? Colors.Transparent : BackgroundColor;
                 }
 
-                if (WindowHelper.IsAppWindowSupported && WindowHelper.ActiveAppWindows.TryGetValue(window.Dispatcher, out HashSet<AppWindow> appWindows))
+                if (WindowHelper.IsAppWindowSupported && WindowHelper.ActiveAppWindows.TryGetValue(window.Dispatcher, out Dictionary<XamlRoot, AppWindow> appWindows))
                 {
-                    foreach (AppWindow appWindow in appWindows)
+                    foreach (AppWindow appWindow in appWindows.Values)
                     {
                         bool ExtendViewIntoTitleBar = appWindow.TitleBar.ExtendsContentIntoTitleBar;
                         AppWindowTitleBar TitleBar = appWindow.TitleBar;

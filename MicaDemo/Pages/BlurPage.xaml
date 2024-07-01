@@ -7,13 +7,14 @@
     xmlns:helpers="using:MicaDemo.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:MicaForUWP.Media"
+    DataContext="{x:Bind Provider}"
     Loaded="Page_Loaded"
     NavigationCacheMode="Enabled"
     mc:Ignorable="d">
     <Page.Background>
-        <ImageBrush ImageSource="/Assets/Photos/BigFourSummerHeat.jpg" Stretch="UniformToFill" />
+        <ImageBrush ImageSource="{x:Bind Provider.BackgroundImage, Mode=OneWay}" Stretch="UniformToFill" />
     </Page.Background>
-    <Grid>
+    <Grid x:Name="RootGrid" DoubleTapped="Grid_DoubleTapped">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition />
@@ -21,7 +22,7 @@
         </Grid.ChildrenTransitions>
         <Grid.Background>
             <media:BackdropBlurBrush
-                x:Name="BackdropBlurBrush"
+                x:Name="BackdropBrush"
                 AlwaysUseFallback="{Binding IsChecked, ElementName=AlwaysUseFallback, Mode=OneWay}"
                 Amount="{x:Bind Amount.Value, Mode=OneWay}"
                 BackgroundSource="{Binding SelectedValue, ElementName=BackgroundSource, Mode=OneWay}"
@@ -29,8 +30,61 @@
                 TintColor="{x:Bind TintColor.Color, Mode=OneWay}"
                 TintOpacity="{x:Bind TintOpacity.Value, Mode=OneWay}" />
         </Grid.Background>
+        <helpers:UIElementHelper.ContextFlyout>
+            <MenuFlyout>
+                <MenuFlyoutItem
+                    Click="Button_Click"
+                    Tag="ChangeTheme"
+                    Text="Change Theme">
+                    <helpers:UIElementHelper.Icon>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE771;" />
+                    </helpers:UIElementHelper.Icon>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem
+                    Click="Button_Click"
+                    Tag="HideSetting"
+                    Text="Hide Setting"
+                    Visibility="{x:Bind Provider.IsHideCard, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='true', Mode=OneWay}">
+                    <helpers:UIElementHelper.Icon>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xED1A;" />
+                    </helpers:UIElementHelper.Icon>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem
+                    Click="Button_Click"
+                    Tag="ShowSetting"
+                    Text="Show Setting"
+                    Visibility="{x:Bind Provider.IsHideCard, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                    <helpers:UIElementHelper.Icon>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE890;" />
+                    </helpers:UIElementHelper.Icon>
+                </MenuFlyoutItem>
+                <MenuFlyoutSubItem Text="Open New Window">
+                    <helpers:UIElementHelper.Icon>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE78B;" />
+                    </helpers:UIElementHelper.Icon>
+                    <MenuFlyoutItem
+                        Click="Button_Click"
+                        Tag="NewWindow"
+                        Text="Core Window">
+                        <helpers:UIElementHelper.Icon>
+                            <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE737;" />
+                        </helpers:UIElementHelper.Icon>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutItem
+                        Click="Button_Click"
+                        IsEnabled="{x:Bind Provider.IsAppWindowSupported}"
+                        Tag="NewAppWindow"
+                        Text="App Window">
+                        <helpers:UIElementHelper.Icon>
+                            <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE737;" />
+                        </helpers:UIElementHelper.Icon>
+                    </MenuFlyoutItem>
+                </MenuFlyoutSubItem>
+            </MenuFlyout>
+        </helpers:UIElementHelper.ContextFlyout>
         <Border
-            Margin="{x:Bind ScrollViewerMargin}"
+            x:Name="CardBorder"
+            Margin="{x:Bind Provider.ScrollViewerMargin}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             helpers:UIElementHelper.BackgroundTransition="True"
@@ -52,37 +106,57 @@
                     BackRequested="TitleBar_BackRequested"
                     BackgroundVisibility="Collapsed"
                     RefreshButtonVisibility="Collapsed">
-                    <StackPanel Orientation="Horizontal">
-                        <Button
-                            HorizontalAlignment="Stretch"
-                            Click="Button_Click"
-                            Content="&#xE771;"
-                            Style="{StaticResource IconButtonStyle}"
-                            Tag="ChangeTheme"
-                            ToolTipService.ToolTip="Change Theme" />
-                        <Button
-                            Grid.Column="4"
-                            VerticalAlignment="Center"
-                            Click="Button_Click"
-                            Content="&#xE78B;"
-                            Style="{StaticResource IconButtonStyle}"
-                            Tag="NewWindow"
-                            ToolTipService.ToolTip="Open New Window">
-                            <helpers:UIElementHelper.ContextFlyout>
-                                <MenuFlyout>
-                                    <MenuFlyoutItem
-                                        Click="Button_Click"
-                                        IsEnabled="{x:Bind IsAppWindowSupported}"
-                                        Tag="NewAppWindow"
-                                        Text="Open New App Window">
-                                        <helpers:UIElementHelper.Icon>
-                                            <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE78B;" />
-                                        </helpers:UIElementHelper.Icon>
-                                    </MenuFlyoutItem>
-                                </MenuFlyout>
-                            </helpers:UIElementHelper.ContextFlyout>
-                        </Button>
-                    </StackPanel>
+                    <ScrollViewer
+                        HorizontalScrollBarVisibility="Hidden"
+                        HorizontalScrollMode="Auto"
+                        VerticalScrollBarVisibility="Disabled"
+                        VerticalScrollMode="Disabled">
+                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                            <Button
+                                HorizontalAlignment="Stretch"
+                                Click="Button_Click"
+                                Content="&#xED1A;"
+                                Style="{StaticResource IconButtonStyle}"
+                                Tag="HideSetting"
+                                ToolTipService.ToolTip="Hide Setting" />
+                            <Button
+                                HorizontalAlignment="Stretch"
+                                Click="Button_Click"
+                                Content="&#xE771;"
+                                Style="{StaticResource IconButtonStyle}"
+                                Tag="ChangeTheme"
+                                ToolTipService.ToolTip="Change Theme" />
+                            <ToggleButton
+                                HorizontalAlignment="Stretch"
+                                Content="&#xE744;"
+                                IsChecked="{Binding IsCompactOverlay, Mode=TwoWay}"
+                                Style="{StaticResource IconToggleButtonStyle}"
+                                ToolTipService.ToolTip="Compact Overlay"
+                                Visibility="{x:Bind Provider.IsSupportCompactOverlay, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+                            <Button
+                                Grid.Column="4"
+                                VerticalAlignment="Center"
+                                Click="Button_Click"
+                                Content="&#xE78B;"
+                                Style="{StaticResource IconButtonStyle}"
+                                Tag="NewWindow"
+                                ToolTipService.ToolTip="Open New Window">
+                                <helpers:UIElementHelper.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem
+                                            Click="Button_Click"
+                                            IsEnabled="{x:Bind Provider.IsAppWindowSupported}"
+                                            Tag="NewAppWindow"
+                                            Text="Open New App Window">
+                                            <helpers:UIElementHelper.Icon>
+                                                <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE78B;" />
+                                            </helpers:UIElementHelper.Icon>
+                                        </MenuFlyoutItem>
+                                    </MenuFlyout>
+                                </helpers:UIElementHelper.ContextFlyout>
+                            </Button>
+                        </StackPanel>
+                    </ScrollViewer>
                 </control:TitleBar>
                 <ScrollViewer Grid.Row="1">
                     <StackPanel Padding="18,0,18,8">
@@ -102,7 +176,7 @@
                             x:Name="BackgroundSource"
                             HorizontalAlignment="Stretch"
                             Header="BackgroundSource"
-                            ItemsSource="{x:Bind BackgroundSources}"
+                            ItemsSource="{x:Bind Provider.BackgroundSources}"
                             SelectedIndex="1" />
                         <ToggleButton
                             x:Name="AlwaysUseFallback"
@@ -116,5 +190,35 @@
                 </ScrollViewer>
             </Grid>
         </Border>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualStateGroup.Transitions>
+                    <VisualTransition From="DisplayCard" To="HideCard">
+                        <VisualTransition.Storyboard>
+                            <Storyboard>
+                                <FadeOutThemeAnimation TargetName="CardBorder" />
+                            </Storyboard>
+                        </VisualTransition.Storyboard>
+                    </VisualTransition>
+                    <VisualTransition From="HideCard" To="DisplayCard">
+                        <VisualTransition.Storyboard>
+                            <Storyboard>
+                                <FadeInThemeAnimation TargetName="CardBorder" />
+                            </Storyboard>
+                        </VisualTransition.Storyboard>
+                    </VisualTransition>
+                </VisualStateGroup.Transitions>
+                <VisualState x:Name="DisplayCard">
+                    <VisualState.Setters>
+                        <Setter Target="CardBorder.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="HideCard">
+                    <VisualState.Setters>
+                        <Setter Target="CardBorder.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>

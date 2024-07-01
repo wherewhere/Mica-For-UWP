@@ -1,5 +1,6 @@
 ﻿using MicaDemo.Common;
 using MicaDemo.Helpers;
+using MicaDemo.ViewModels;
 using MicaForUWP.Media;
 using System;
 using Windows.ApplicationModel.Core;
@@ -7,6 +8,7 @@ using Windows.UI;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
@@ -19,33 +21,50 @@ namespace MicaDemo.Pages
     /// </summary>
     public sealed partial class BlurPage : Page
     {
-        private readonly Thickness ScrollViewerMargin = UIHelper.ScrollViewerMargin;
-        private readonly Array BackgroundSources = Enum.GetValues(typeof(BackgroundSource));
-        private readonly bool IsAppWindowSupported = WindowHelper.IsAppWindowSupported;
+        private readonly BrushViewModel Provider;
 
         private bool isDark;
         private long token;
 
-        public BlurPage() => InitializeComponent();
+        private bool IsHideCard
+        {
+            get => Provider.IsHideCard;
+            set
+            {
+                if (Provider.IsHideCard != value)
+                {
+                    Provider.IsHideCard = value;
+                    VisualStateManager.GoToState(this, value ? "HideCard" : "DisplayCard", true);
+                }
+            }
+        }
+
+        public BlurPage()
+        {
+            InitializeComponent();
+            Provider = new BrushViewModel(Dispatcher);
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             ThemeHelper.UISettingChanged += OnUISettingChanged;
-            token = BackdropBlurBrush.RegisterPropertyChangedCallback(BackdropBlurBrush.TintColorProperty, OnTintColorPropertyChanged);
-            OnTintColorPropertyChanged(BackdropBlurBrush, BackdropBlurBrush.TintColorProperty);
+            token = BackdropBrush.RegisterPropertyChangedCallback(BackdropBlurBrush.TintColorProperty, OnTintColorPropertyChanged);
+            OnTintColorPropertyChanged(BackdropBrush, BackdropBlurBrush.TintColorProperty);
+            VisualStateManager.GoToState(this, "DisplayCard", false);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
             ThemeHelper.UISettingChanged -= OnUISettingChanged;
-            BackdropBlurBrush.UnregisterPropertyChangedCallback(BackdropBlurBrush.TintColorProperty, token);
+            BackdropBrush.UnregisterPropertyChangedCallback(BackdropBlurBrush.TintColorProperty, token);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             _ = ThemeHelper.GetRootThemeAsync().ContinueWith(x => x.Result.IsDarkTheme()).ContinueWith(x => isDark = x.Result);
+            Provider.CompactOverlay = this.IsAppWindow() ? (ICompactOverlay)new AppWindowCompactOverlay(this.GetWindowForElement()) : new CoreWindowCompactOverlay();
         }
 
         private async void OnUISettingChanged(bool theme)
@@ -99,9 +118,22 @@ namespace MicaDemo.Pages
                 case "ChangeTheme":
                     _ = ThemeHelper.IsDarkThemeAsync().ContinueWith(x => ThemeHelper.SetRootThemeAsync(x.Result ? ElementTheme.Light : ElementTheme.Dark));
                     break;
+                case "HideSetting":
+                    IsHideCard = true;
+                    break;
+                case "ShowSetting":
+                    IsHideCard = false;
+                    break;
                 default:
                     break;
             }
+        }
+
+        private void Grid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            if (e?.Handled == true) { return; }
+            IsHideCard = !IsHideCard;
+            if (e != null) { e.Handled = true; }
         }
     }
 }
