@@ -377,11 +377,11 @@ namespace MicaForUWP.Media
                     TintToFallBackAnimation?.SetColorParameter("TintColor", TintColor);
                     HostOpacityZeroAnimation?.SetScalarParameter("TintOpacity", (float)TintOpacity);
                     TintOpacityFillAnimation?.SetScalarParameter("TintOpacity", (float)TintOpacity);
-
+                    
                     CoreWindow.GetForCurrentThread().Activated += CoreWindow_Activated;
                     CoreWindow.GetForCurrentThread().VisibilityChanged += CoreWindow_VisibilityChanged;
                     PowerManager.EnergySaverStatusChanged += On_EnergySaverStatusChanged;
-
+                    
                     if (PowerManager.EnergySaverStatus == EnergySaverStatus.On)
                     {
                         SetCompositionFocus(false);

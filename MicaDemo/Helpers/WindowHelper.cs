@@ -61,44 +61,31 @@ namespace MicaDemo.Helpers
             }
         }
 
-        public static void TrackWindow(this AppWindow window, Frame frame)
+        private static void TrackWindow(this AppWindow window, Frame frame)
         {
             if (!ActiveAppWindows.ContainsKey(frame.Dispatcher))
             {
-                ActiveAppWindows[frame.Dispatcher] = new Dictionary<UIElement, AppWindow>();
+                ActiveAppWindows[frame.Dispatcher] = new HashSet<AppWindow>();
             }
 
-            if (!ActiveAppWindows[frame.Dispatcher].ContainsKey(frame))
+            if (!ActiveAppWindows[frame.Dispatcher].Contains(window))
             {
                 window.Closed += (sender, args) =>
                 {
-                    if (ActiveAppWindows.TryGetValue(frame.Dispatcher, out Dictionary<UIElement, AppWindow> windows))
+                    if (ActiveAppWindows.TryGetValue(frame.Dispatcher, out HashSet<AppWindow> windows))
                     {
-                        windows?.Remove(frame);
+                        windows?.Remove(window);
                     }
                     frame.Content = null;
                     window = null;
                 };
-                ActiveAppWindows[frame.Dispatcher][frame] = window;
+                ActiveAppWindows[frame.Dispatcher].Add(window);
             }
         }
 
-        public static UIElement GetXamlRootForWindow(this AppWindow window)
-        {
-            foreach (Dictionary<UIElement, AppWindow> windows in ActiveAppWindows.Values)
-            {
-                foreach (KeyValuePair<UIElement, AppWindow> element in windows)
-                {
-                    if (element.Value == window)
-                    {
-                        return element.Key;
-                    }
-                }
-            }
-            return null;
-        }
+        public static UIElement GetXamlRootForWindow(this AppWindow window) => ElementCompositionPreview.GetAppWindowContent(window);
 
         public static Dictionary<CoreDispatcher, Window> ActiveWindows { get; } = new Dictionary<CoreDispatcher, Window>();
-        public static Dictionary<CoreDispatcher, Dictionary<UIElement, AppWindow>> ActiveAppWindows { get; } = IsAppWindowSupported ? new Dictionary<CoreDispatcher, Dictionary<UIElement, AppWindow>>() : null;
+        public static Dictionary<CoreDispatcher, HashSet<AppWindow>> ActiveAppWindows { get; } = IsAppWindowSupported ? new Dictionary<CoreDispatcher, HashSet<AppWindow>>() : null;
     }
 }

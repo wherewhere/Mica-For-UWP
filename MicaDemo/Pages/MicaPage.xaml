@@ -7,6 +7,7 @@
     xmlns:helpers="using:MicaDemo.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:MicaForUWP.Media"
+    Loaded="Page_Loaded"
     NavigationCacheMode="Enabled"
     mc:Ignorable="d">
     <Page.Background>
@@ -20,9 +21,10 @@
         </Grid.ChildrenTransitions>
         <Grid.Background>
             <media:BackdropMicaBrush
+                x:Name="BackdropMicaBrush"
                 AlwaysUseFallback="{Binding IsChecked, ElementName=AlwaysUseFallback, Mode=OneWay}"
                 BackgroundSource="{Binding SelectedValue, ElementName=BackgroundSource, Mode=OneWay}"
-                FallbackColor="{StaticResource SolidBackgroundFillColorBase}"
+                FallbackColor="{Binding TintColor, RelativeSource={RelativeSource Mode=Self}}"
                 LuminosityOpacity="{x:Bind LuminosityOpacity.Value, Mode=OneWay}"
                 TintColor="{x:Bind TintColor.Color, Mode=OneWay}"
                 TintOpacity="{x:Bind TintOpacity.Value, Mode=OneWay}" />
@@ -31,9 +33,10 @@
             Margin="{x:Bind ScrollViewerMargin}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Background="{StaticResource CardBackgroundFillColorDefaultBrush}"
-            BorderBrush="{StaticResource CardBorderBrush}"
-            BorderThickness="{StaticResource CardBorderThickness}"
+            helpers:UIElementHelper.BackgroundTransition="True"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardBorderBrush}"
+            BorderThickness="{ThemeResource CardBorderThickness}"
             CornerRadius="8">
             <Grid>
                 <Grid.RowDefinitions>

@@ -7,6 +7,7 @@
     xmlns:helpers="using:MicaDemo.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:MicaForUWP.Media"
+    Loaded="Page_Loaded"
     NavigationCacheMode="Enabled"
     mc:Ignorable="d">
     <Page.Background>
@@ -20,10 +21,11 @@
         </Grid.ChildrenTransitions>
         <Grid.Background>
             <media:BackdropBlurBrush
+                x:Name="BackdropBlurBrush"
                 AlwaysUseFallback="{Binding IsChecked, ElementName=AlwaysUseFallback, Mode=OneWay}"
                 Amount="{x:Bind Amount.Value, Mode=OneWay}"
                 BackgroundSource="{Binding SelectedValue, ElementName=BackgroundSource, Mode=OneWay}"
-                FallbackColor="{StaticResource SolidBackgroundFillColorBase}"
+                FallbackColor="{Binding TintColor, RelativeSource={RelativeSource Mode=Self}}"
                 TintColor="{x:Bind TintColor.Color, Mode=OneWay}"
                 TintOpacity="{x:Bind TintOpacity.Value, Mode=OneWay}" />
         </Grid.Background>
@@ -31,9 +33,10 @@
             Margin="{x:Bind ScrollViewerMargin}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Background="{StaticResource CardBackgroundFillColorDefaultBrush}"
-            BorderBrush="{StaticResource CardBorderBrush}"
-            BorderThickness="{StaticResource CardBorderThickness}"
+            helpers:UIElementHelper.BackgroundTransition="True"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardBorderBrush}"
+            BorderThickness="{ThemeResource CardBorderThickness}"
             CornerRadius="8">
             <Grid>
                 <Grid.RowDefinitions>
@@ -69,8 +72,8 @@
                                 <MenuFlyout>
                                     <MenuFlyoutItem
                                         Click="Button_Click"
-                                        Tag="NewAppWindow"
                                         IsEnabled="{x:Bind IsAppWindowSupported}"
+                                        Tag="NewAppWindow"
                                         Text="Open New App Window">
                                         <helpers:UIElementHelper.Icon>
                                             <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE78B;" />

@@ -1,5 +1,6 @@
 ﻿using MicaDemo.Common;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
@@ -31,7 +32,7 @@ namespace MicaDemo.Helpers
             remove => actions.Remove(value);
         }
 
-        public static void InvokeUISettingChanged(bool value) => actions.Invoke(value);
+        private static void InvokeUISettingChanged(bool value) => actions.Invoke(value);
 
         #endregion
 
@@ -65,9 +66,9 @@ namespace MicaDemo.Helpers
                     rootElement.RequestedTheme = value;
                 }
 
-                if (WindowHelper.IsAppWindowSupported && WindowHelper.ActiveAppWindows.TryGetValue(window.Dispatcher, out System.Collections.Generic.Dictionary<UIElement, AppWindow> appWindows))
+                if (WindowHelper.IsAppWindowSupported && WindowHelper.ActiveAppWindows.TryGetValue(window.Dispatcher, out HashSet<AppWindow> appWindows))
                 {
-                    foreach (FrameworkElement element in appWindows.Keys.OfType<FrameworkElement>())
+                    foreach (FrameworkElement element in appWindows.Select(x => x.GetXamlRootForWindow()).OfType<FrameworkElement>())
                     {
                         element.RequestedTheme = value;
                     }
@@ -88,21 +89,19 @@ namespace MicaDemo.Helpers
 
         public static async void Initialize(Window window)
         {
+            if (window == null) { return; }
             // Save reference as this might be null when the user is in another app
-            CurrentApplicationWindow = CurrentApplicationWindow ?? window;
+            if (CurrentApplicationWindow == null)
+            { CurrentApplicationWindow = window; }
             if (window?.Content is FrameworkElement rootElement)
-            {
-                rootElement.RequestedTheme = await GetRootThemeAsync(CurrentApplicationWindow);
-            }
+            { rootElement.RequestedTheme = await GetRootThemeAsync(CurrentApplicationWindow); }
             UpdateSystemCaptionButtonColors(window);
         }
 
         public static async void Initialize(AppWindow window)
         {
             if (window?.GetXamlRootForWindow() is FrameworkElement rootElement)
-            {
-                rootElement.RequestedTheme = await GetRootThemeAsync(CurrentApplicationWindow);
-            }
+            { rootElement.RequestedTheme = await GetRootThemeAsync(CurrentApplicationWindow); }
             UpdateSystemCaptionButtonColors(window);
         }
 
@@ -145,9 +144,9 @@ namespace MicaDemo.Helpers
 
                 CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = IsExtendsTitleBar;
 
-                if (WindowHelper.IsAppWindowSupported && WindowHelper.ActiveAppWindows.TryGetValue(window.Dispatcher, out System.Collections.Generic.Dictionary<UIElement, AppWindow> appWindows))
+                if (WindowHelper.IsAppWindowSupported && WindowHelper.ActiveAppWindows.TryGetValue(window.Dispatcher, out HashSet<AppWindow> appWindows))
                 {
-                    foreach (AppWindow appWindow in appWindows.Values)
+                    foreach (AppWindow appWindow in appWindows)
                     {
                         appWindow.TitleBar.ExtendsContentIntoTitleBar = IsExtendsTitleBar;
                     }
@@ -183,9 +182,9 @@ namespace MicaDemo.Helpers
                     TitleBar.ButtonBackgroundColor = TitleBar.ButtonInactiveBackgroundColor = ExtendViewIntoTitleBar ? Colors.Transparent : BackgroundColor;
                 }
 
-                if (WindowHelper.IsAppWindowSupported && WindowHelper.ActiveAppWindows.TryGetValue(window.Dispatcher, out System.Collections.Generic.Dictionary<UIElement, AppWindow> appWindows))
+                if (WindowHelper.IsAppWindowSupported && WindowHelper.ActiveAppWindows.TryGetValue(window.Dispatcher, out HashSet<AppWindow> appWindows))
                 {
-                    foreach (AppWindow appWindow in appWindows.Values)
+                    foreach (AppWindow appWindow in appWindows)
                     {
                         bool ExtendViewIntoTitleBar = appWindow.TitleBar.ExtendsContentIntoTitleBar;
                         AppWindowTitleBar TitleBar = appWindow.TitleBar;

@@ -3,7 +3,6 @@ using MicaDemo.Helpers;
 using MicaForUWP.Media;
 using System;
 using Windows.ApplicationModel.Core;
-using Windows.Foundation.Metadata;
 using Windows.UI;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
@@ -23,31 +22,52 @@ namespace MicaDemo.Pages
         private readonly Thickness ScrollViewerMargin = UIHelper.ScrollViewerMargin;
         private readonly Array BackgroundSources = Enum.GetValues(typeof(BackgroundSource));
         private readonly bool IsAppWindowSupported = WindowHelper.IsAppWindowSupported;
-        private readonly bool IsActualThemeChangedSupported = ApiInformation.IsEventPresent("Windows.UI.Xaml.FrameworkElement", "ActualThemeChanged");
+
+        private bool isDark;
+        private long token;
 
         public BlurPage() => InitializeComponent();
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (IsActualThemeChangedSupported)
-            { ActualThemeChanged += OnActualThemeChanged; }
+            ThemeHelper.UISettingChanged += OnUISettingChanged;
+            token = BackdropBlurBrush.RegisterPropertyChangedCallback(BackdropBlurBrush.TintColorProperty, OnTintColorPropertyChanged);
+            OnTintColorPropertyChanged(BackdropBlurBrush, BackdropBlurBrush.TintColorProperty);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-            if (IsActualThemeChangedSupported)
-            { ActualThemeChanged -= OnActualThemeChanged; }
+            ThemeHelper.UISettingChanged -= OnUISettingChanged;
+            BackdropBlurBrush.UnregisterPropertyChangedCallback(BackdropBlurBrush.TintColorProperty, token);
         }
 
-        private async void OnActualThemeChanged(FrameworkElement sender, object args)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!Dispatcher.HasThreadAccess)
+            _ = ThemeHelper.GetRootThemeAsync().ContinueWith(x => x.Result.IsDarkTheme()).ContinueWith(x => isDark = x.Result);
+        }
+
+        private async void OnUISettingChanged(bool theme)
+        {
+            if (isDark != theme)
             {
                 await Dispatcher.ResumeForegroundAsync();
+                TintColor.Color = ReversalColor(TintColor.Color);
+                isDark = theme;
             }
-            TintColor.Color = Color.FromArgb(TintColor.Color.A, (byte)(255 - TintColor.Color.R), (byte)(255 - TintColor.Color.G), (byte)(255 - TintColor.Color.B));
+
+            Color ReversalColor(in Color color)
+            {
+                return Color.FromArgb(color.A, (byte)(255 - color.R), (byte)(255 - color.G), (byte)(255 - color.B));
+            }
+        }
+
+        private void OnTintColorPropertyChanged(DependencyObject sender, DependencyProperty dp)
+        {
+            Color color = (Color)sender.GetValue(dp);
+            bool isLight = color.IsColorLight();
+            RequestedTheme = isLight ? ElementTheme.Light : ElementTheme.Dark;
         }
 
         private void TitleBar_BackRequested(object sender, RoutedEventArgs e)
