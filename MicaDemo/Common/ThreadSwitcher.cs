@@ -6,6 +6,7 @@ using Windows.Foundation.Metadata;
 using Windows.System;
 using Windows.System.Threading;
 using Windows.UI.Core;
+using ThreadPool = Windows.System.Threading.ThreadPool;
 
 namespace MicaDemo.Common
 {
