@@ -14,7 +14,11 @@
     <Page.Background>
         <ImageBrush ImageSource="{x:Bind Provider.BackgroundImage, Mode=OneWay}" Stretch="UniformToFill" />
     </Page.Background>
-    <Grid x:Name="RootGrid" DoubleTapped="Grid_DoubleTapped">
+    <Grid
+        x:Name="RootGrid"
+        Margin="-48"
+        Padding="48"
+        DoubleTapped="Grid_DoubleTapped">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition />
@@ -24,7 +28,7 @@
             <media:BackdropMicaBrush
                 x:Name="BackdropBrush"
                 AlwaysUseFallback="{Binding IsChecked, ElementName=AlwaysUseFallback, Mode=OneWay}"
-                BackgroundSource="{Binding SelectedValue, ElementName=BackgroundSource, Mode=OneWay}"
+                BackgroundSource="{x:Bind Provider.SelectSource, Mode=OneWay}"
                 FallbackColor="{Binding TintColor, RelativeSource={RelativeSource Mode=Self}}"
                 LuminosityOpacity="{x:Bind LuminosityOpacity.Value, Mode=OneWay}"
                 TintColor="{x:Bind TintColor.Color, Mode=OneWay}"
@@ -46,7 +50,7 @@
                     Text="Hide Setting"
                     Visibility="{x:Bind Provider.IsHideCard, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='true', Mode=OneWay}">
                     <helpers:UIElementHelper.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xED1A;" />
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE9A9;" />
                     </helpers:UIElementHelper.Icon>
                 </MenuFlyoutItem>
                 <MenuFlyoutItem
@@ -136,7 +140,7 @@
                             <Button
                                 HorizontalAlignment="Stretch"
                                 Click="Button_Click"
-                                Content="&#xED1A;"
+                                Content="&#xE9A9;"
                                 Style="{StaticResource IconButtonStyle}"
                                 Tag="HideSetting"
                                 ToolTipService.ToolTip="Hide Setting" />
@@ -158,7 +162,6 @@
                                     <MenuFlyout>
                                         <MenuFlyoutItem
                                             Click="Button_Click"
-                                            IsEnabled="{x:Bind Provider.IsAppWindowSupported}"
                                             Tag="RemoveImage"
                                             Text="Remove Backgroud Image">
                                             <helpers:UIElementHelper.Icon>
@@ -220,8 +223,11 @@
                             x:Name="BackgroundSource"
                             HorizontalAlignment="Stretch"
                             Header="BackgroundSource"
-                            ItemsSource="{x:Bind Provider.BackgroundSources}"
-                            SelectedIndex="2" />
+                            SelectedIndex="{x:Bind Provider.SelectIndex, Mode=TwoWay}">
+                            <ComboBoxItem>HostBackdrop</ComboBoxItem>
+                            <ComboBoxItem>Backdrop</ComboBoxItem>
+                            <ComboBoxItem>WallpaperBackdrop</ComboBoxItem>
+                        </ComboBox>
                         <ToggleButton
                             x:Name="AlwaysUseFallback"
                             Margin="0,4"

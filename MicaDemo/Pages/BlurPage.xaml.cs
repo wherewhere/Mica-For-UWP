@@ -42,7 +42,7 @@ namespace MicaDemo.Pages
         public BlurPage()
         {
             InitializeComponent();
-            Provider = new BrushViewModel(Dispatcher);
+            Provider = new BrushViewModel(Dispatcher) { SelectSource = MicaForUWP.Media.BackgroundSource.Backdrop };
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

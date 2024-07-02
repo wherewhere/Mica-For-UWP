@@ -23,13 +23,13 @@ namespace MicaDemo
             if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush"))
             {
                 MicaSymbol.Symbol = Symbol.Cancel;
-                ToolTipService.SetToolTip(Mica, "Not Support Mica");
+                ToolTipService.SetToolTip(Mica, "Not Support Wallpaper Backdrop");
             }
             if (!ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.XamlCompositionBrushBase"))
             {
                 BlurSymbol.Symbol = Symbol.Cancel;
                 Mica.IsEnabled = Blur.IsEnabled = false;
-                ToolTipService.SetToolTip(Blur, "Not Support Blur");
+                ToolTipService.SetToolTip(Blur, "Not Support Composition Brush");
             }
         }
 

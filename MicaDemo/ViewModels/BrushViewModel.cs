@@ -3,28 +3,29 @@ using MicaDemo.Helpers;
 using MicaForUWP.Media;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.Foundation.Metadata;
-using Windows.Storage.Pickers;
+using Windows.Graphics.Imaging;
 using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.Graphics.Imaging;
-using Windows.Storage.Streams;
 
 namespace MicaDemo.ViewModels
 {
     public class BrushViewModel : INotifyPropertyChanged
     {
-        private readonly static string[] imageTypes = new[] { ".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif", ".heif", ".heic" };
+        private static readonly string[] imageTypes = new[] { ".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif", ".heif", ".heic" };
 
         public Thickness ScrollViewerMargin { get; } = UIHelper.ScrollViewerMargin;
-        public Array BackgroundSources { get; } = Enum.GetValues(typeof(BackgroundSource));
+        public Array BackgroundSources { get; } = Enum.GetValues(typeof(BackgroundSource)).OfType<BackgroundSource>().Where(x => ApiInformation.IsEnumNamedValuePresent("MicaForUWP.Media", x.ToString())).ToArray();
         public bool IsAppWindowSupported { get; } = WindowHelper.IsAppWindowSupported;
 
         public CoreDispatcher Dispatcher { get; }
@@ -61,6 +62,34 @@ namespace MicaDemo.ViewModels
                         CompactOverlay?.ExitCompactOverlay();
                     }
                     RaisePropertyChangedEvent();
+                }
+            }
+        }
+
+        private int selectIndex;
+        public int SelectIndex
+        {
+            get => selectIndex;
+            set
+            {
+                if (selectIndex != value)
+                {
+                    selectIndex = value;
+                    RaisePropertyChangedEvent(nameof(SelectIndex), nameof(SelectSource));
+                }
+            }
+        }
+
+        public BackgroundSource SelectSource
+        {
+            get => (BackgroundSource)selectIndex;
+            set
+            {
+                int index = (int)value;
+                if (selectIndex != index)
+                {
+                    selectIndex = index;
+                    RaisePropertyChangedEvent(nameof(SelectIndex), nameof(SelectSource));
                 }
             }
         }
@@ -173,39 +202,39 @@ namespace MicaDemo.ViewModels
 
     public class CoreWindowCompactOverlay : ICompactOverlay
     {
-        public bool IsSupportCompactOverlay =>
-            ApiInformation.IsMethodPresent("Windows.UI.ViewManagement.ApplicationView", "IsViewModeSupported")
-            && ApplicationView.GetForCurrentView().IsViewModeSupported(ApplicationViewMode.CompactOverlay);
+        private static readonly bool isSupportCompactOverlay = ApiInformation.IsMethodPresent("Windows.UI.ViewManagement.ApplicationView", "IsViewModeSupported");
+        private readonly ApplicationView view = ApplicationView.GetForCurrentView();
+
+        public bool IsSupportCompactOverlay => isSupportCompactOverlay && view.IsViewModeSupported(ApplicationViewMode.CompactOverlay);
 
         public bool IsCompactOverlay =>
-            IsSupportCompactOverlay && ApplicationView.GetForCurrentView().ViewMode == ApplicationViewMode.CompactOverlay;
+            IsSupportCompactOverlay && view.ViewMode == ApplicationViewMode.CompactOverlay;
 
         public void EnterCompactOverlay()
         {
-            if (ApplicationView.GetForCurrentView().IsViewModeSupported(ApplicationViewMode.CompactOverlay))
+            if (view.IsViewModeSupported(ApplicationViewMode.CompactOverlay))
             {
-                _ = ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.CompactOverlay);
+                _ = view.TryEnterViewModeAsync(ApplicationViewMode.CompactOverlay);
             }
         }
 
         public void ExitCompactOverlay()
         {
-            if (ApplicationView.GetForCurrentView().IsViewModeSupported(ApplicationViewMode.Default))
+            if (view.IsViewModeSupported(ApplicationViewMode.Default))
             {
-                _ = ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.Default);
+                _ = view.TryEnterViewModeAsync(ApplicationViewMode.Default);
             }
         }
     }
 
     public class AppWindowCompactOverlay : ICompactOverlay
     {
+        private static readonly bool isSupportCompactOverlay = ApiInformation.IsMethodPresent("Windows.UI.WindowManagement.AppWindowPresenter", "IsPresentationSupported");
         private readonly AppWindow window;
 
         public AppWindowCompactOverlay(AppWindow window) => this.window = window;
 
-        public bool IsSupportCompactOverlay =>
-            ApiInformation.IsMethodPresent("Windows.UI.WindowManagement.AppWindowPresenter", "IsPresentationSupported")
-            && window.Presenter.IsPresentationSupported(AppWindowPresentationKind.CompactOverlay);
+        public bool IsSupportCompactOverlay => isSupportCompactOverlay && window.Presenter.IsPresentationSupported(AppWindowPresentationKind.CompactOverlay);
 
         public bool IsCompactOverlay =>
             IsSupportCompactOverlay && window.Presenter.GetConfiguration().Kind == AppWindowPresentationKind.CompactOverlay;

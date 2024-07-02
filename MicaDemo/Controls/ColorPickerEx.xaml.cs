@@ -16,11 +16,17 @@ namespace MicaDemo.Controls
         private Slider GSlider;
         private Slider BSlider;
 
-        public static readonly DependencyProperty ColorProperty = DependencyProperty.Register(
-           nameof(Color),
-           typeof(Color),
-           typeof(ColorPickerEx),
-           new PropertyMetadata(default(Color), OnColorPropertyChanged));
+        #region ContextFlyout
+
+        /// <summary>
+        /// Identifies the <see cref="Color"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ColorProperty =
+            DependencyProperty.Register(
+                nameof(Color),
+                typeof(Color),
+                typeof(ColorPickerEx),
+                new PropertyMetadata(default(Color), OnColorPropertyChanged));
 
         public Color Color
         {
@@ -35,6 +41,8 @@ namespace MicaDemo.Controls
                 (d as ColorPickerEx).OnColorPropertyChanged(e);
             }
         }
+
+        #endregion
 
         public ColorPickerEx()
         {

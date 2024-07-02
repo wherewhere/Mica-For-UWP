@@ -42,7 +42,7 @@ namespace MicaDemo.Pages
         public MicaPage()
         {
             InitializeComponent();
-            Provider = new BrushViewModel(Dispatcher);
+            Provider = new BrushViewModel(Dispatcher) { SelectSource = MicaForUWP.Media.BackgroundSource.WallpaperBackdrop };
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
