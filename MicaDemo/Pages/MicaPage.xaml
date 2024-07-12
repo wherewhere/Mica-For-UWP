@@ -28,6 +28,7 @@
             <media:BackdropMicaBrush
                 x:Name="BackdropBrush"
                 AlwaysUseFallback="{Binding IsChecked, ElementName=AlwaysUseFallback, Mode=OneWay}"
+                Amount="{x:Bind Amount.Value, Mode=OneWay}"
                 BackgroundSource="{x:Bind Provider.SelectSource, Mode=OneWay}"
                 FallbackColor="{Binding TintColor, RelativeSource={RelativeSource Mode=Self}}"
                 LuminosityOpacity="{x:Bind LuminosityOpacity.Value, Mode=OneWay}"
@@ -219,6 +220,11 @@
                             SmallChange="0.001"
                             StepFrequency="0.001"
                             Value="1" />
+                        <Slider
+                            x:Name="Amount"
+                            Header="Amount"
+                            Maximum="100"
+                            Value="0" />
                         <ComboBox
                             x:Name="BackgroundSource"
                             HorizontalAlignment="Stretch"
