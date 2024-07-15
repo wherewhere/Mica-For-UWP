@@ -2,6 +2,7 @@
  
   <PropertyGroup>
     <FullTargets Condition="'$(FullTargets)' == ''">true</FullTargets>
+    <NoWarn>$(NoWarn);NU1902;NU1903</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>

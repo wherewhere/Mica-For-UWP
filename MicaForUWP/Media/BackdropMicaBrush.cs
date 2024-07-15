@@ -1,5 +1,6 @@
 ﻿using Microsoft.Graphics.Canvas.Effects;
 using System;
+using System.Diagnostics;
 using Windows.Foundation;
 using Windows.Foundation.Metadata;
 using Windows.System.Power;
@@ -20,9 +21,8 @@ namespace MicaForUWP.Media
 #endif
     public class BackdropMicaBrush : XamlCompositionBrushBase
     {
-        private bool _isForce = true;
-
-        private CompositionBrush brush;
+        private CompositionEffectBrush brush;
+        private CompositionColorBrush fallback;
         private ScalarKeyFrameAnimation tintOpacityFillAnimation;
         private ScalarKeyFrameAnimation hostOpacityZeroAnimation;
         private ColorKeyFrameAnimation tintToFallBackAnimation;
@@ -130,16 +130,18 @@ namespace MicaForUWP.Media
         {
             if (d is BackdropMicaBrush brush && e.NewValue?.Equals(e.OldValue) != true)
             {
-                brush.tintToFallBackAnimation?.SetColorParameter("TintColor", (Color)e.NewValue);
-                if (brush._isForce)
+                Color color = (Color)e.NewValue;
+                brush.tintToFallBackAnimation?.SetColorParameter("TintColor", color);
+
+                if (brush.brush is CompositionEffectBrush effect)
                 {
-                    brush.CompositionBrush?.Properties.InsertColor("TintColor.Color", (Color)e.NewValue);
-                    brush.CompositionBrush?.Properties.InsertColor("LuminosityColor.Color", (Color)e.NewValue);
+                    effect.Properties.InsertColor("TintColor.Color", color);
+                    effect.Properties.InsertColor("LuminosityColor.Color", color);
                 }
-                else
+
+                if (brush.fallback is CompositionColorBrush fallback)
                 {
-                    brush.brush?.Properties.InsertColor("TintColor.Color", (Color)e.NewValue);
-                    brush.brush?.Properties.InsertColor("LuminosityColor.Color", (Color)e.NewValue);
+                    fallback.Color = color;
                 }
             }
         }
@@ -182,14 +184,7 @@ namespace MicaForUWP.Media
                 }
 
                 // Unbox and set a new blur amount if the CompositionBrush exists.
-                if (brush._isForce)
-                {
-                    brush.CompositionBrush?.Properties.InsertScalar("Blur.BlurAmount", (float)value);
-                }
-                else
-                {
-                    brush.brush?.Properties.InsertScalar("Blur.BlurAmount", (float)value);
-                }
+                brush.brush?.Properties.InsertScalar("Blur.BlurAmount", (float)value);
             }
         }
 
@@ -234,17 +229,8 @@ namespace MicaForUWP.Media
                 {
                     brush.LuminosityOpacity = value = 0;
                 }
-
                 brush.hostOpacityZeroAnimation?.SetScalarParameter("LuminosityOpacity", (float)value);
-
-                if (brush._isForce)
-                {
-                    brush.CompositionBrush?.Properties.InsertScalar("LuminosityOpacity.Opacity", (float)value);
-                }
-                else
-                {
-                    brush.brush?.Properties.InsertScalar("LuminosityOpacity.Opacity", (float)value);
-                }
+                brush.brush?.Properties.InsertScalar("LuminosityOpacity.Opacity", (float)value);
             }
         }
 
@@ -289,17 +275,8 @@ namespace MicaForUWP.Media
                 {
                     brush.TintOpacity = value = 0;
                 }
-
                 brush.tintOpacityFillAnimation?.SetScalarParameter("TintOpacity", (float)value);
-
-                if (brush._isForce)
-                {
-                    brush.CompositionBrush?.Properties.InsertScalar("TintOpacity.Opacity", (float)value);
-                }
-                else
-                {
-                    brush.brush?.Properties.InsertScalar("TintOpacity.Opacity", (float)value);
-                }
+                brush.brush?.Properties.InsertScalar("TintOpacity.Opacity", (float)value);
             }
         }
 
@@ -348,143 +325,155 @@ namespace MicaForUWP.Media
                     return;
                 }
 
+                fallback = compositor.CreateColorBrush(FallbackColor);
+
                 if (!AlwaysUseFallback)
                 {
-                    ColorSourceEffect tintColorEffect = new ColorSourceEffect()
+                    try
                     {
-                        Color = TintColor,
-                        Name = "TintColor"
-                    };
-
-                    OpacityEffect tintOpacityEffect = new OpacityEffect()
-                    {
-                        Name = "TintOpacity",
-                        Source = tintColorEffect,
-                        Opacity = (float)TintOpacity
-                    };
-
-                    ColorSourceEffect luminosityColorEffect = new ColorSourceEffect()
-                    {
-                        Color = TintColor,
-                        Name = "LuminosityColor"
-                    };
-
-                    OpacityEffect luminosityOpacityEffect = new OpacityEffect()
-                    {
-                        Name = "LuminosityOpacity",
-                        Source = luminosityColorEffect,
-                        Opacity = (float)LuminosityOpacity
-                    };
-
-                    BlendEffect luminosityBlendEffect = new BlendEffect()
-                    {
-                        Mode = BlendEffectMode.Color,
-                        Foreground = luminosityOpacityEffect,
-                        Background = new GaussianBlurEffect
+                        ColorSourceEffect tintColorEffect = new ColorSourceEffect()
                         {
-                            Name = "Blur",
-                            BlurAmount = (float)Amount,
-                            BorderMode = EffectBorderMode.Hard,
-                            Optimization = EffectOptimization.Balanced,
-                            Source = new CompositionEffectSourceParameter("BlurredWallpaperBackdrop")
+                            Color = TintColor,
+                            Name = "TintColor"
+                        };
+
+                        OpacityEffect tintOpacityEffect = new OpacityEffect()
+                        {
+                            Name = "TintOpacity",
+                            Source = tintColorEffect,
+                            Opacity = (float)TintOpacity
+                        };
+
+                        ColorSourceEffect luminosityColorEffect = new ColorSourceEffect()
+                        {
+                            Color = TintColor,
+                            Name = "LuminosityColor"
+                        };
+
+                        OpacityEffect luminosityOpacityEffect = new OpacityEffect()
+                        {
+                            Name = "LuminosityOpacity",
+                            Source = luminosityColorEffect,
+                            Opacity = (float)LuminosityOpacity
+                        };
+
+                        BlendEffect luminosityBlendEffect = new BlendEffect()
+                        {
+                            Mode = BlendEffectMode.Color,
+                            Foreground = luminosityOpacityEffect,
+                            Background = new GaussianBlurEffect
+                            {
+                                Name = "Blur",
+                                BlurAmount = (float)Amount,
+                                BorderMode = EffectBorderMode.Hard,
+                                Optimization = EffectOptimization.Balanced,
+                                Source = new CompositionEffectSourceParameter("BlurredWallpaperBackdrop")
+                            }
+                        };
+
+                        BlendEffect colorBlendEffect = new BlendEffect()
+                        {
+                            Foreground = tintOpacityEffect,
+                            Mode = BlendEffectMode.Luminosity,
+                            Background = luminosityBlendEffect,
+                        };
+
+                        CompositionBackdropBrush backdrop;
+
+                        switch (BackgroundSource)
+                        {
+                            case BackgroundSource.Backdrop:
+                                if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateBackdropBrush"))
+                                {
+                                    backdrop = compositor.CreateBackdropBrush();
+                                }
+                                else
+                                {
+                                    goto fallback;
+                                }
+                                break;
+                            case BackgroundSource.HostBackdrop:
+                                if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
+                                {
+                                    backdrop = compositor.CreateHostBackdropBrush();
+                                }
+                                else
+                                {
+                                    goto fallback;
+                                }
+                                break;
+                            case BackgroundSource.WallpaperBackdrop:
+                                if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush"))
+                                {
+                                    backdrop = compositor.TryCreateBlurredWallpaperBackdropBrush();
+                                }
+                                else if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
+                                {
+                                    backdrop = compositor.CreateHostBackdropBrush();
+                                }
+                                else
+                                {
+                                    goto fallback;
+                                }
+                                break;
+                            default:
+                                goto fallback;
                         }
-                    };
 
-                    BlendEffect colorBlendEffect = new BlendEffect()
-                    {
-                        Foreground = tintOpacityEffect,
-                        Mode = BlendEffectMode.Luminosity,
-                        Background = luminosityBlendEffect,
-                    };
+                        CompositionEffectBrush micaEffectBrush = compositor.CreateEffectFactory(colorBlendEffect, new[] { "TintColor.Color", "TintOpacity.Opacity", "LuminosityColor.Color", "LuminosityOpacity.Opacity", "Blur.BlurAmount" }).CreateBrush();
+                        micaEffectBrush.SetSourceParameter("BlurredWallpaperBackdrop", backdrop);
 
-                    CompositionBackdropBrush backdrop;
+                        brush = micaEffectBrush;
+                        CompositionBrush = brush;
 
-                    switch (BackgroundSource)
-                    {
-                        case BackgroundSource.Backdrop:
-                            if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateBackdropBrush"))
-                            {
-                                CompositionBrush = compositor.CreateColorBrush(FallbackColor);
-                                return;
-                            }
-                            backdrop = compositor.CreateBackdropBrush();
-                            break;
-                        case BackgroundSource.HostBackdrop:
-                            if (!ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
-                            {
-                                CompositionBrush = compositor.CreateColorBrush(FallbackColor);
-                                return;
-                            }
-                            backdrop = compositor.CreateHostBackdropBrush();
-                            break;
-                        case BackgroundSource.WallpaperBackdrop:
-                            if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush"))
-                            {
-                                backdrop = compositor.TryCreateBlurredWallpaperBackdropBrush();
-                            }
-                            else if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
-                            {
-                                backdrop = compositor.CreateHostBackdropBrush();
-                            }
-                            else
-                            {
-                                CompositionBrush = compositor.CreateColorBrush(FallbackColor);
-                                return;
-                            }
-                            break;
-                        default:
-                            CompositionBrush = compositor.CreateColorBrush(FallbackColor);
-                            return;
+                        LinearEasingFunction line = compositor.CreateLinearEasingFunction();
+
+                        TimeSpan duration = TintTransitionDuration == TimeSpan.Zero ? TimeSpan.FromTicks(10000) : TintTransitionDuration;
+                        TimeSpan switchDuration = TimeSpan.FromMilliseconds(167);
+
+                        tintOpacityFillAnimation = compositor.CreateScalarKeyFrameAnimation();
+                        tintOpacityFillAnimation.InsertExpressionKeyFrame(0f, "TintOpacity", line);
+                        tintOpacityFillAnimation.InsertKeyFrame(1f, 1f, line);
+                        tintOpacityFillAnimation.Duration = switchDuration;
+                        tintOpacityFillAnimation.Target = "TintOpacity.Opacity";
+
+                        hostOpacityZeroAnimation = compositor.CreateScalarKeyFrameAnimation();
+                        hostOpacityZeroAnimation.InsertExpressionKeyFrame(0f, "LuminosityOpacity", line);
+                        hostOpacityZeroAnimation.InsertKeyFrame(1f, 1f, line);
+                        hostOpacityZeroAnimation.Duration = switchDuration;
+                        hostOpacityZeroAnimation.Target = "LuminosityOpacity.Opacity";
+
+                        tintToFallBackAnimation = compositor.CreateColorKeyFrameAnimation();
+                        tintToFallBackAnimation.InsertExpressionKeyFrame(0f, "TintColor", line);
+                        tintToFallBackAnimation.InsertExpressionKeyFrame(1f, "FallbackColor", line);
+                        tintToFallBackAnimation.Duration = duration;
+                        tintToFallBackAnimation.Target = "TintColor.Color";
+
+                        tintToFallBackAnimation?.SetColorParameter("TintColor", TintColor);
+                        tintOpacityFillAnimation?.SetScalarParameter("TintOpacity", (float)TintOpacity);
+                        hostOpacityZeroAnimation?.SetScalarParameter("LuminosityOpacity", (float)LuminosityOpacity);
+
+                        CoreWindow window = CoreWindow.GetForCurrentThread();
+                        window.Activated += CoreWindow_Activated;
+                        window.VisibilityChanged += CoreWindow_VisibilityChanged;
+                        PowerManager.EnergySaverStatusChanged += On_EnergySaverStatusChanged;
+
+                        if (PowerManager.EnergySaverStatus == EnergySaverStatus.On)
+                        {
+                            SetCompositionFocus(false);
+                        }
+
+                        return;
                     }
-
-                    CompositionEffectBrush micaEffectBrush = compositor.CreateEffectFactory(colorBlendEffect, new[] { "TintColor.Color", "TintOpacity.Opacity", "LuminosityColor.Color", "LuminosityOpacity.Opacity", "Blur.BlurAmount" }).CreateBrush();
-                    micaEffectBrush.SetSourceParameter("BlurredWallpaperBackdrop", backdrop);
-
-                    brush = micaEffectBrush;
-                    CompositionBrush = brush;
-
-                    LinearEasingFunction line = compositor.CreateLinearEasingFunction();
-
-                    TimeSpan duration = TintTransitionDuration == TimeSpan.Zero ? TimeSpan.FromTicks(10000) : TintTransitionDuration;
-                    TimeSpan switchDuration = TimeSpan.FromMilliseconds(167);
-
-                    tintOpacityFillAnimation = compositor.CreateScalarKeyFrameAnimation();
-                    tintOpacityFillAnimation.InsertExpressionKeyFrame(0f, "TintOpacity", line);
-                    tintOpacityFillAnimation.InsertKeyFrame(1f, 1f, line);
-                    tintOpacityFillAnimation.Duration = switchDuration;
-                    tintOpacityFillAnimation.Target = "TintOpacity.Opacity";
-
-                    hostOpacityZeroAnimation = compositor.CreateScalarKeyFrameAnimation();
-                    hostOpacityZeroAnimation.InsertExpressionKeyFrame(0f, "LuminosityOpacity", line);
-                    hostOpacityZeroAnimation.InsertKeyFrame(1f, 1f, line);
-                    hostOpacityZeroAnimation.Duration = switchDuration;
-                    hostOpacityZeroAnimation.Target = "LuminosityOpacity.Opacity";
-
-                    tintToFallBackAnimation = compositor.CreateColorKeyFrameAnimation();
-                    tintToFallBackAnimation.InsertExpressionKeyFrame(0f, "TintColor", line);
-                    tintToFallBackAnimation.InsertExpressionKeyFrame(1f, "FallbackColor", line);
-                    tintToFallBackAnimation.Duration = duration;
-                    tintToFallBackAnimation.Target = "TintColor.Color";
-
-                    tintToFallBackAnimation?.SetColorParameter("TintColor", TintColor);
-                    tintOpacityFillAnimation?.SetScalarParameter("TintOpacity", (float)TintOpacity);
-                    hostOpacityZeroAnimation?.SetScalarParameter("LuminosityOpacity", (float)LuminosityOpacity);
-
-                    CoreWindow window = CoreWindow.GetForCurrentThread();
-                    window.Activated += CoreWindow_Activated;
-                    window.VisibilityChanged += CoreWindow_VisibilityChanged;
-                    PowerManager.EnergySaverStatusChanged += On_EnergySaverStatusChanged;
-
-                    if (PowerManager.EnergySaverStatus == EnergySaverStatus.On)
+                    catch (Exception ex)
                     {
-                        SetCompositionFocus(false);
+                        Debug.Fail(ex.ToString());
                     }
                 }
-                else
-                {
-                    brush = compositor.CreateColorBrush(FallbackColor);
-                    CompositionBrush = brush;
-                }
+                
+            fallback:
+                brush = null;
+                CompositionBrush = fallback;
             }
         }
 
@@ -493,11 +482,19 @@ namespace MicaForUWP.Media
         /// </summary>
         protected override void OnDisconnected()
         {
+            CompositionBrush = null;
+
             // Dispose of composition resources when no longer in use.
-            if (CompositionBrush != null)
+            if (brush != null)
             {
-                CompositionBrush.Dispose();
-                CompositionBrush = null;
+                brush.Dispose();
+                brush = null;
+            }
+
+            if (fallback != null)
+            {
+                fallback.Dispose();
+                fallback = null;
             }
 
             CoreWindow window = CoreWindow.GetForCurrentThread();
@@ -548,13 +545,14 @@ namespace MicaForUWP.Media
             }
         }
 
-        private void SetCompositionFocus(bool IsGotFocus)
+        private void SetCompositionFocus(bool iIsGotFocus)
         {
-            IsGotFocus = IsGotFocus && PowerManager.EnergySaverStatus != EnergySaverStatus.On;
-            if (CompositionBrush == null) { return; }
-            if (BackgroundSource == BackgroundSource.Backdrop) { return; }
+            if (BackgroundSource == BackgroundSource.Backdrop
+                || CompositionBrush == null
+                || brush == null) { return; }
+            iIsGotFocus = iIsGotFocus && PowerManager.EnergySaverStatus != EnergySaverStatus.On;
             tintToFallBackAnimation.SetColorParameter("FallbackColor", FallbackColor);
-            if (IsGotFocus)
+            if (iIsGotFocus)
             {
                 CompositionBrush = brush;
                 tintOpacityFillAnimation.Direction = AnimationDirection.Reverse;
@@ -574,15 +572,13 @@ namespace MicaForUWP.Media
                 CompositionBrush.StartAnimation("TintOpacity.Opacity", tintOpacityFillAnimation);
                 CompositionBrush.StartAnimation("LuminosityOpacity.Opacity", hostOpacityZeroAnimation);
                 CompositionBrush.StartAnimation("TintColor.Color", tintToFallBackAnimation);
-                scopedBatch.Completed += (s, a) => CompositionBrush = compositor.CreateColorBrush(FallbackColor);
+                scopedBatch.Completed += (s, a) => CompositionBrush = fallback;
                 scopedBatch.End();
             }
             else
             {
-                if (!(Compositor is Compositor compositor)) { return; }
-                CompositionBrush = compositor.CreateColorBrush(FallbackColor);
+                CompositionBrush = fallback;
             }
-            _isForce = IsGotFocus;
         }
     }
 }
