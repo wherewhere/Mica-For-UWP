@@ -21,6 +21,8 @@ namespace MicaForUWP.Media
 #endif
     public class BackdropBlurBrush : XamlCompositionBrushBase
     {
+        private bool _isForce = true;
+
         private CompositionEffectBrush brush;
         private CompositionColorBrush fallback;
         private ScalarKeyFrameAnimation tintOpacityFillAnimation;
@@ -492,9 +494,8 @@ namespace MicaForUWP.Media
             if (BackgroundSource == BackgroundSource.Backdrop
                 || CompositionBrush == null
                 || brush == null) { return; }
-            isGotFocus = isGotFocus && PowerManager.EnergySaverStatus != EnergySaverStatus.On;
             tintToFallBackAnimation.SetColorParameter("FallbackColor", FallbackColor);
-            if (isGotFocus)
+            if (_isForce = isGotFocus && PowerManager.EnergySaverStatus != EnergySaverStatus.On)
             {
                 CompositionBrush = brush;
                 tintOpacityFillAnimation.Direction = AnimationDirection.Reverse;
@@ -514,12 +515,8 @@ namespace MicaForUWP.Media
                 brush.StartAnimation("Arithmetic.Source2Amount", tintOpacityFillAnimation);
                 brush.StartAnimation("Arithmetic.Source1Amount", hostOpacityZeroAnimation);
                 brush.StartAnimation("TintColor.Color", tintToFallBackAnimation);
-                scopedBatch.Completed += (s, a) => CompositionBrush = fallback;
+                scopedBatch.Completed += (s, a) => { if (!_isForce) { CompositionBrush = fallback; } };
                 scopedBatch.End();
-            }
-            else
-            {
-                CompositionBrush = fallback;
             }
         }
     }

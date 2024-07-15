@@ -21,6 +21,8 @@ namespace MicaForUWP.Media
 #endif
     public class BackdropMicaBrush : XamlCompositionBrushBase
     {
+        private bool _isForce = true;
+
         private CompositionEffectBrush brush;
         private CompositionColorBrush fallback;
         private ScalarKeyFrameAnimation tintOpacityFillAnimation;
@@ -545,22 +547,21 @@ namespace MicaForUWP.Media
             }
         }
 
-        private void SetCompositionFocus(bool iIsGotFocus)
+        private void SetCompositionFocus(bool isGotFocus)
         {
             if (BackgroundSource == BackgroundSource.Backdrop
                 || CompositionBrush == null
                 || brush == null) { return; }
-            iIsGotFocus = iIsGotFocus && PowerManager.EnergySaverStatus != EnergySaverStatus.On;
             tintToFallBackAnimation.SetColorParameter("FallbackColor", FallbackColor);
-            if (iIsGotFocus)
+            if (_isForce = isGotFocus && PowerManager.EnergySaverStatus != EnergySaverStatus.On)
             {
                 CompositionBrush = brush;
                 tintOpacityFillAnimation.Direction = AnimationDirection.Reverse;
                 hostOpacityZeroAnimation.Direction = AnimationDirection.Reverse;
                 tintToFallBackAnimation.Direction = AnimationDirection.Reverse;
-                CompositionBrush.StartAnimation("TintOpacity.Opacity", tintOpacityFillAnimation);
-                CompositionBrush.StartAnimation("LuminosityOpacity.Opacity", hostOpacityZeroAnimation);
-                CompositionBrush.StartAnimation("TintColor.Color", tintToFallBackAnimation);
+                brush.StartAnimation("TintOpacity.Opacity", tintOpacityFillAnimation);
+                brush.StartAnimation("LuminosityOpacity.Opacity", hostOpacityZeroAnimation);
+                brush.StartAnimation("TintColor.Color", tintToFallBackAnimation);
             }
             else if (CompositionBrush == brush)
             {
@@ -569,15 +570,11 @@ namespace MicaForUWP.Media
                 tintOpacityFillAnimation.Direction = AnimationDirection.Normal;
                 hostOpacityZeroAnimation.Direction = AnimationDirection.Normal;
                 tintToFallBackAnimation.Direction = AnimationDirection.Normal;
-                CompositionBrush.StartAnimation("TintOpacity.Opacity", tintOpacityFillAnimation);
-                CompositionBrush.StartAnimation("LuminosityOpacity.Opacity", hostOpacityZeroAnimation);
-                CompositionBrush.StartAnimation("TintColor.Color", tintToFallBackAnimation);
-                scopedBatch.Completed += (s, a) => CompositionBrush = fallback;
+                brush.StartAnimation("TintOpacity.Opacity", tintOpacityFillAnimation);
+                brush.StartAnimation("LuminosityOpacity.Opacity", hostOpacityZeroAnimation);
+                brush.StartAnimation("TintColor.Color", tintToFallBackAnimation);
+                scopedBatch.Completed += (s, a) => { if (!_isForce) { CompositionBrush = fallback; } };
                 scopedBatch.End();
-            }
-            else
-            {
-                CompositionBrush = fallback;
             }
         }
     }
