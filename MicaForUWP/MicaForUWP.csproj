@@ -2,6 +2,7 @@
  
   <PropertyGroup>
     <FullTargets Condition="'$(FullTargets)' == ''">true</FullTargets>
+    <AddCSWinRT Condition="'$(AddCSWinRT)' == ''">false</AddCSWinRT>
     <NoWarn>$(NoWarn);NU1902;NU1903</NoWarn>
   </PropertyGroup>
 
@@ -9,7 +10,6 @@
     <Authors>wherewhere</Authors>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <Copyright>Copyright © 2017 - 2024 wherewhere. All Rights Reserved.</Copyright>
-    <CsWinRTIncludes>Microsoft.Graphics.Canvas</CsWinRTIncludes>
     <Deterministic>true</Deterministic>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -22,10 +22,10 @@
 
   <PropertyGroup>
     <ExtrasUwpMetaPackageVersion>6.2.14</ExtrasUwpMetaPackageVersion>
-    <LangVersion Condition="'$(TargetFramework)' != 'net6.0-windows10.0.22000.0'">7.3</LangVersion>
-    <LangVersion Condition="'$(TargetFramework)' == 'net6.0-windows10.0.22000.0'">latest</LangVersion>
-    <TargetFramework Condition="'$(FullTargets)' != 'true'">uap10.0</TargetFramework>
-    <TargetFrameworks Condition="'$(FullTargets)' == 'true'">native;netcoreapp3.1;uap10.0;uap10.0.15138.0</TargetFrameworks>
+    <LangVersion>7.3</LangVersion>
+    <TargetFrameworks>uap10.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(FullTargets)' == 'true'">$(TargetFrameworks);native;netcoreapp3.1;uap10.0.15138.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(AddCSWinRT)' == 'true'">$(TargetFrameworks);net6.0-windows10.0.22000.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -46,6 +46,12 @@
     <NuspecProperties>id=$(AssemblyName);version=$(VersionPrefix);title=$(Title);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);license=$(PackageLicenseExpression);icon=$(PackageIcon);readme=$(PackageReadmeFile);projectUrl=$(PackageProjectUrl);iconUrl=$(PackageIconUrl);description=$(Description);releaseNotes=$(PackageReleaseNotes);copyright=$(Copyright);repositoryType=$(RepositoryType);repositoryUrl=$(PackageProjectUrl);repositoryCommit=$(RepositoryCommit);buildOutput=bin\$(Configuration)</NuspecProperties>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0-windows10.0.17763.0'))">
+    <CsWinRTIncludes>Microsoft.Graphics.Canvas</CsWinRTIncludes>
+    <LangVersion>latest</LangVersion>
+    <WindowsSdkPackageVersion>10.0.22000.37-preview</WindowsSdkPackageVersion>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Win2D.uwp" Version="1.27.1" />
   </ItemGroup>
@@ -58,9 +64,8 @@
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.26100.1" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows10.0.22000.0'">
-    <PackageReference Include="Dongle.Windows.CsWinRT" Version="3.0.0-wux.2" />
-    <PackageReference Include="Dongle.WindowsSDK.NET" Version="10.0.22621.756" />
+  <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0-windows10.0.17763.0'))">
+    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.1.0-prerelease.240722.1" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">

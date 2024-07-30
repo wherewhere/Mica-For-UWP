@@ -19,7 +19,7 @@ namespace MicaForUWP.Media
 #if WINRT
     sealed
 #endif
-    public class BackdropBlurBrush : XamlCompositionBrushBase
+    public partial class BackdropBlurBrush : XamlCompositionBrushBase
     {
         private bool _isForce = true;
 
