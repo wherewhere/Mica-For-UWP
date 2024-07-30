@@ -363,13 +363,23 @@ namespace MicaForUWP.Media
                         {
                             Mode = BlendEffectMode.Color,
                             Foreground = luminosityOpacityEffect,
-                            Background = new GaussianBlurEffect
+                            Background = new CompositeEffect
                             {
-                                Name = "Blur",
-                                BlurAmount = (float)Amount,
-                                BorderMode = EffectBorderMode.Hard,
-                                Optimization = EffectOptimization.Balanced,
-                                Source = new CompositionEffectSourceParameter("BlurredWallpaperBackdrop")
+                                Sources =
+                                {
+                                    new ColorSourceEffect
+                                    {
+                                        Color = Colors.Black
+                                    },
+                                    new GaussianBlurEffect
+                                    {
+                                        Name = "Blur",
+                                        BlurAmount = (float)Amount,
+                                        BorderMode = EffectBorderMode.Hard,
+                                        Optimization = EffectOptimization.Balanced,
+                                        Source = new CompositionEffectSourceParameter("BlurredWallpaperBackdrop")
+                                    }
+                                }
                             }
                         };
 
@@ -472,7 +482,7 @@ namespace MicaForUWP.Media
                         Debug.Fail(ex.ToString());
                     }
                 }
-                
+
             fallback:
                 brush = null;
                 CompositionBrush = fallback;
