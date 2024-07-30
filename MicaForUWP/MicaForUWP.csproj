@@ -16,7 +16,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/wherewhere/Mica-For-UWP</RepositoryUrl>
     <Title>Mica UWP - Use Mica without WinUI</Title>
-    <VersionPrefix>0.1.11</VersionPrefix>
+    <VersionPrefix>0.2.12</VersionPrefix>
     <Description>A UWP Library that implement an easy way to use Mica material without WinUI.</Description>
   </PropertyGroup>
 
