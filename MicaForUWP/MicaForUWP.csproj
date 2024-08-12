@@ -25,7 +25,7 @@
     <LangVersion>7.3</LangVersion>
     <TargetFrameworks>uap10.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(FullTargets)' == 'true'">$(TargetFrameworks);native;netcoreapp3.1;uap10.0.15138.0</TargetFrameworks>
-    <TargetFrameworks Condition="'$(AddCSWinRT)' == 'true'">$(TargetFrameworks);net6.0-windows10.0.22000.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(AddCSWinRT)' == 'true'">$(TargetFrameworks);net8.0-windows10.0.22000.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -46,10 +46,14 @@
     <NuspecProperties>id=$(AssemblyName);version=$(VersionPrefix);title=$(Title);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);license=$(PackageLicenseExpression);icon=$(PackageIcon);readme=$(PackageReadmeFile);projectUrl=$(PackageProjectUrl);iconUrl=$(PackageIconUrl);description=$(Description);releaseNotes=$(PackageReleaseNotes);copyright=$(Copyright);repositoryType=$(RepositoryType);repositoryUrl=$(PackageProjectUrl);repositoryCommit=$(RepositoryCommit);buildOutput=bin\$(Configuration)</NuspecProperties>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0-windows10.0.17763.0'))">
+  <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">
+		<IsAotCompatible>true</IsAotCompatible>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0-windows10.0.22000.0'))">
     <CsWinRTIncludes>Microsoft.Graphics.Canvas</CsWinRTIncludes>
     <LangVersion>latest</LangVersion>
-    <WindowsSdkPackageVersion>10.0.22000.37-preview</WindowsSdkPackageVersion>
+		<WindowsSdkPackageVersion>10.0.22000.42</WindowsSdkPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -64,8 +68,8 @@
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.26100.1" />
   </ItemGroup>
 
-  <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0-windows10.0.17763.0'))">
-    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.1.0-prerelease.240722.1" />
+  <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0-windows10.0.17763.0'))">
+    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.1.1" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
