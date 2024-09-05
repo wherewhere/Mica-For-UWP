@@ -2,7 +2,7 @@
  
   <PropertyGroup>
     <FullTargets Condition="'$(FullTargets)' == ''">true</FullTargets>
-    <AddCSWinRT Condition="'$(AddCSWinRT)' == ''">false</AddCSWinRT>
+    <AddCSWinRT Condition="'$(AddCSWinRT)' == ''">true</AddCSWinRT>
     <NoWarn>$(NoWarn);NU1902;NU1903</NoWarn>
   </PropertyGroup>
 
@@ -25,7 +25,7 @@
     <LangVersion>7.3</LangVersion>
     <TargetFrameworks>uap10.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(FullTargets)' == 'true'">$(TargetFrameworks);native;netcoreapp3.1;uap10.0.15138.0</TargetFrameworks>
-    <TargetFrameworks Condition="'$(AddCSWinRT)' == 'true'">$(TargetFrameworks);net8.0-windows10.0.22000.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(AddCSWinRT)' == 'true'">$(TargetFrameworks);net8.0-windows10.0.22621.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -50,14 +50,13 @@
 		<IsAotCompatible>true</IsAotCompatible>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0-windows10.0.22000.0'))">
-    <CsWinRTIncludes>Microsoft.Graphics.Canvas</CsWinRTIncludes>
+  <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0-windows10.0.22621.0'))">
     <LangVersion>latest</LangVersion>
-		<WindowsSdkPackageVersion>10.0.22000.42</WindowsSdkPackageVersion>
+		<WindowsSdkPackageVersion>10.0.22621.42</WindowsSdkPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Win2D.uwp" Version="1.27.1" />
+    <PackageReference Include="Win2D.uwp" Version="1.28.0-preview1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'native'">
@@ -69,7 +68,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0-windows10.0.17763.0'))">
-    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.1.1" PrivateAssets="all" IsImplicitlyDefined="true" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
@@ -84,7 +83,7 @@
 
   <ItemGroup>
     <None Include="..\logo.png" Pack="true" PackagePath="\Icon.png" />
-    <None Include="..\README.md" Pack="True" PackagePath="\README.md"/>
+    <None Include="..\README.md" Pack="True" PackagePath="\README.md" />
     <None Remove="MicaForUWP.nuspec" />
     <None Remove="MicaForUWP.targets" />
   </ItemGroup>

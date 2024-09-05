@@ -1,6 +1,8 @@
-﻿using Microsoft.Graphics.Canvas.Effects;
+﻿using MicaForUWP.Helpers;
+using Microsoft.Graphics.Canvas.Effects;
 using System;
 using System.Diagnostics;
+using System.Runtime.Versioning;
 using Windows.Foundation;
 using Windows.Foundation.Metadata;
 using Windows.System.Power;
@@ -15,7 +17,10 @@ namespace MicaForUWP.Media
     /// <summary>
     /// The <see cref="BackdropMicaBrush"/> is a <see cref="Brush"/> that blurs whatever is behind it in the application.
     /// </summary>
-    [ContractVersion(typeof(UniversalApiContract), 262144)]
+#if NET
+    [SupportedOSPlatform("Windows10.0.15063.0")]
+#endif
+    [ContractVersion(typeof(UniversalApiContract), 0x40000)]
 #if WINRT
     sealed
 #endif
@@ -395,7 +400,7 @@ namespace MicaForUWP.Media
                         switch (BackgroundSource)
                         {
                             case BackgroundSource.Backdrop:
-                                if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateBackdropBrush"))
+                                if (ApiInfoHelper.IsCreateBackdropBrushSupported)
                                 {
                                     backdrop = compositor.CreateBackdropBrush();
                                 }
@@ -405,7 +410,7 @@ namespace MicaForUWP.Media
                                 }
                                 break;
                             case BackgroundSource.HostBackdrop:
-                                if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
+                                if (ApiInfoHelper.IsCreateHostBackdropBrushSupported)
                                 {
                                     backdrop = compositor.CreateHostBackdropBrush();
                                 }
@@ -415,11 +420,11 @@ namespace MicaForUWP.Media
                                 }
                                 break;
                             case BackgroundSource.WallpaperBackdrop:
-                                if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "TryCreateBlurredWallpaperBackdropBrush"))
+                                if (ApiInfoHelper.IsTryCreateBlurredWallpaperBackdropBrushSupported)
                                 {
                                     backdrop = compositor.TryCreateBlurredWallpaperBackdropBrush();
                                 }
-                                else if (ApiInformation.IsMethodPresent("Windows.UI.Composition.Compositor", "CreateHostBackdropBrush"))
+                                else if (ApiInfoHelper.IsCreateHostBackdropBrushSupported)
                                 {
                                     backdrop = compositor.CreateHostBackdropBrush();
                                 }
@@ -535,10 +540,7 @@ namespace MicaForUWP.Media
         {
             if (PowerManager.EnergySaverStatus == EnergySaverStatus.On)
             {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-                    SetCompositionFocus(false);
-                });
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => SetCompositionFocus(false));
             }
             else
             {
@@ -551,7 +553,10 @@ namespace MicaForUWP.Media
                     else
                     {
                         CoreWindow window = CoreWindow.GetForCurrentThread();
-                        SetCompositionFocus(window.ActivationMode != CoreWindowActivationMode.Deactivated && window.Visible);
+                        SetCompositionFocus(
+                            ApiInfoHelper.IsActivationModeSupported
+                            ? window.ActivationMode != CoreWindowActivationMode.Deactivated && window.Visible
+                            : window.Visible);
                     }
                 });
             }

@@ -46,7 +46,7 @@ namespace MicaDemo.Helpers
             UIElement element = (UIElement)d;
             if (ApiInformation.IsPropertyPresent("Windows.UI.Xaml.UIElement", "ContextFlyout"))
             {
-                element.ContextFlyout = GetContextFlyout(element);
+                element.ContextFlyout = e.NewValue as FlyoutBase;
             }
             else if (element is FrameworkElement frameworkElement)
             {
@@ -143,23 +143,23 @@ namespace MicaDemo.Helpers
         {
             if (d is MenuFlyoutItem item)
             {
-                if (e.NewValue is IconElement IconElement && ApiInformation.IsPropertyPresent("Windows.UI.Xaml.Controls.MenuFlyoutItem", "Icon"))
+                if (ApiInformation.IsPropertyPresent("Windows.UI.Xaml.Controls.MenuFlyoutItem", "Icon"))
                 {
-                    item.Icon = IconElement;
+                    item.Icon = e.NewValue as IconElement;
                 }
             }
             else if (d is MenuFlyoutSubItem subitem)
             {
-                if (e.NewValue is IconElement IconElement && ApiInformation.IsPropertyPresent("Windows.UI.Xaml.Controls.MenuFlyoutSubItem", "Icon"))
+                if (ApiInformation.IsPropertyPresent("Windows.UI.Xaml.Controls.MenuFlyoutSubItem", "Icon"))
                 {
-                    subitem.Icon = IconElement;
+                    subitem.Icon = e.NewValue as IconElement;
                 }
             }
             else if (d is ToggleMenuFlyoutItem toggle)
             {
-                if (e.NewValue is IconElement IconElement && ApiInformation.IsPropertyPresent("Windows.UI.Xaml.Controls.ToggleMenuFlyoutItem", "Icon"))
+                if (ApiInformation.IsPropertyPresent("Windows.UI.Xaml.Controls.ToggleMenuFlyoutItem", "Icon"))
                 {
-                    toggle.Icon = IconElement;
+                    toggle.Icon = e.NewValue as IconElement;
                 }
             }
         }

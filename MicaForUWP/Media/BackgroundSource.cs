@@ -1,4 +1,5 @@
-﻿using Windows.Foundation;
+﻿using System.Runtime.Versioning;
+using Windows.Foundation;
 using Windows.Foundation.Metadata;
 
 namespace MicaForUWP.Media
@@ -11,19 +12,28 @@ namespace MicaForUWP.Media
         /// <summary>
         /// The brush samples from the content behind the app window.
         /// </summary>
-        [ContractVersion(typeof(UniversalApiContract), 262144u)]
+#if NET
+        [SupportedOSPlatform("Windows10.0.15063.0")]
+#endif
+        [ContractVersion(typeof(UniversalApiContract), 0x40000u)]
         HostBackdrop = 0,
 
         /// <summary>
         /// The brush samples from the app content.
         /// </summary>
-        [ContractVersion(typeof(UniversalApiContract), 196608u)]
+#if NET
+        [SupportedOSPlatform("Windows10.0.14393.0")]
+#endif
+        [ContractVersion(typeof(UniversalApiContract), 0x30000u)]
         Backdrop = 1,
 
         /// <summary>
         /// The brush samples from the wallpaper behind the app window.
         /// </summary>
-        [ContractVersion(typeof(UniversalApiContract), 851968u)]
+#if NET
+        [SupportedOSPlatform("Windows10.0.22000.0")]
+#endif
+        [ContractVersion(typeof(UniversalApiContract), 0xD0000u)]
         WallpaperBackdrop = 2,
     }
 }

@@ -30,10 +30,10 @@ namespace MicaDemo.Helpers
             int newViewId = 0;
             await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                Window newWindow = Window.Current;
-                launched(newWindow);
-                TrackWindow(newWindow);
-                Window.Current.Activate();
+                Window window = Window.Current;
+                TrackWindow(window);
+                launched(window);
+                window.Activate();
                 newViewId = ApplicationView.GetForCurrentView().Id;
             });
             return await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);

@@ -63,7 +63,7 @@ namespace MicaDemo.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            _ = ThemeHelper.GetRootThemeAsync().ContinueWith(x => x.Result.IsDarkTheme()).ContinueWith(x => isDark = x.Result);
+            _ = ThemeHelper.GetRootThemeAsync().ContinueWith(x => ThemeHelper.IsDarkTheme(x.Result)).ContinueWith(x => isDark = x.Result);
             Provider.CompactOverlay = this.IsAppWindow() ? (ICompactOverlay)new AppWindowCompactOverlay(this.GetWindowForElement()) : new CoreWindowCompactOverlay();
         }
 
