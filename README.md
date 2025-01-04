@@ -7,7 +7,7 @@
 [![Issues](https://img.shields.io/github/issues/wherewhere/Mica-For-UWP.svg?label=Issues&style=flat-square)](https://github.com/wherewhere/Mica-For-UWP/issues "Issues")
 [![Stargazers](https://img.shields.io/github/stars/wherewhere/Mica-For-UWP.svg?label=Stars&style=flat-square)](https://github.com/wherewhere/Mica-For-UWP/stargazers "Stargazers")
 
-[![Microsoft Store](https://img.shields.io/badge/download-Demo-magenta.svg?label=Microsoft%20Store&logo=Microsoft&style=for-the-badge&color=11a2f8)](https://www.microsoft.com/store/apps/9NK6JSM7MDNX "Demo")
+[![Microsoft Store](https://img.shields.io/badge/download-Demo-magenta.svg?label=Microsoft%20Store&logo=data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2ZmZiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+TWljcm9zb2Z0IFN0b3JlPC90aXRsZT48cGF0aCBkPSJNMTEuNCA5LjZ2NC4ySDcuMlY5LjZoNC4yem0wIDkuNlYxNUg3LjJ2NC4yaDQuMnptNS40LTkuNnY0LjJoLTQuMlY5LjZoNC4yem0wIDkuNlYxNWgtNC4ydjQuMmg0LjJ6TTcuMiA1LjRWMi43YzAtMS4xNi45NC0yLjEgMi4xLTIuMWg1LjRjMS4xNiAwIDIuMS45NCAyLjEgMi4xdjIuN2g2LjNhLjkuOSAwIDAgMSAuOS45djEzLjhhMy4zIDMuMyAwIDAgMS0zLjMgMy4zSDMuM0EzLjMgMy4zIDAgMCAxIDAgMjAuMVY2LjNhLjkuOSAwIDAgMSAuOS0uOWg2LjN6TTkgMi43djIuN2g2VjIuN2EuMy4zIDAgMCAwLS4zLS4zSDkuM2EuMy4zIDAgMCAwLS4zLjN6TTEuOCAyMC4xYTEuNSAxLjUgMCAwIDAgMS41IDEuNWgxNy40YTEuNSAxLjUgMCAwIDAgMS41LTEuNVY3LjJIMS44djEyLjl6Ii8+PC9zdmc+&style=for-the-badge&color=11a2f8)](https://www.microsoft.com/store/apps/9NK6JSM7MDNX "Demo")
 [![NuGet](https://img.shields.io/nuget/dt/MicaForUWP.svg?logo=NuGet&style=for-the-badge)](https://www.nuget.org/packages/MicaForUWP "NuGet")
 
 ## 目录

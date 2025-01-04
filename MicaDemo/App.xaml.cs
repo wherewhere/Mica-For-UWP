@@ -118,7 +118,7 @@ namespace MicaDemo
         private void Application_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e) => e.Handled = true;
 
         /// <summary>
-        /// Should be called from OnActivated and OnLaunched
+        /// Should be called from OnActivated and OnLaunched.
         /// </summary>
         private void RegisterExceptionHandlingSynchronizationContext()
         {
