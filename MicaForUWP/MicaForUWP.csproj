@@ -16,7 +16,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/wherewhere/Mica-For-UWP</RepositoryUrl>
     <Title>Mica UWP - Use Mica without WinUI</Title>
-    <VersionPrefix>0.2.12</VersionPrefix>
+    <VersionPrefix>0.2.13</VersionPrefix>
     <Description>A UWP Library that implement an easy way to use Mica material without WinUI.</Description>
   </PropertyGroup>
 
@@ -51,14 +51,14 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0-windows10.0.17763.0'))">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
-    <UseRidGraph>true</UseRidGraph>
     <UseUwp>true</UseUwp>
     <UseUwpTools>false</UseUwpTools>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'netcoreapp3.1'">
-    <PackageReference Include="Win2D.uwp" Version="1.28.1" />
+    <PackageReference Include="Win2D.uwp" Version="1.28.2" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'native'">
@@ -67,11 +67,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.26100.1742" />
-    <PackageReference Include="Win2D.uwp" Version="1.27.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0-windows10.0.17763.0'))">
-    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.1.1" PrivateAssets="all" IsImplicitlyDefined="true" />
+    <PackageReference Include="Win2D.uwp" Version="1.27.1" IsImplicitlyDefined="true" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">

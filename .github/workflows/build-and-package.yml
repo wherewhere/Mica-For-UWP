@@ -9,7 +9,7 @@ on:
     - 'MicaForUWP/**'
 
 jobs:
-  build-and-test:
+  build-and-package:
 
     name: build-and-package
     runs-on: windows-latest
