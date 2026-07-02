@@ -266,6 +266,7 @@
     <ProjectReference Include="..\MicaForUWP\MicaForUWP.csproj">
       <Project>{50913772-1182-44a9-8157-0410895e0db3}</Project>
       <Name>MicaForUWP</Name>
+      <SetTargetFramework>TargetFramework=uap10.0</SetTargetFramework>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

@@ -21,11 +21,10 @@ namespace MicaForUWP.Media
     [SupportedOSPlatform("Windows10.0.15063.0")]
 #endif
     [ContractVersion(typeof(UniversalApiContract), 0x40000)]
-#if WINRT
-    sealed
-#endif
-    public partial class BackdropMicaBrush : XamlCompositionBrushBase
+    public sealed partial class BackdropMicaBrush : XamlCompositionBrushBase
     {
+        private static readonly string[] animatableProperties = new[] { "TintColor.Color", "TintOpacity.Opacity", "LuminosityColor.Color", "LuminosityOpacity.Opacity", "Blur.BlurAmount" };
+
         private bool _isForce = true;
 
         private CompositionEffectBrush brush;
@@ -302,7 +301,7 @@ namespace MicaForUWP.Media
                 new PropertyMetadata(TimeSpan.FromMilliseconds(500)));
 
         /// <summary>
-        /// Gets or sets the length of the automatic transition animation used when the TintColor changes.
+        /// Gets or sets the length of the automatic transition animation used when the <see cref="TintColor"/> changes.
         /// </summary>
         public TimeSpan TintTransitionDuration
         {
@@ -437,7 +436,7 @@ namespace MicaForUWP.Media
                                 goto fallback;
                         }
 
-                        CompositionEffectBrush micaEffectBrush = compositor.CreateEffectFactory(colorBlendEffect, new[] { "TintColor.Color", "TintOpacity.Opacity", "LuminosityColor.Color", "LuminosityOpacity.Opacity", "Blur.BlurAmount" }).CreateBrush();
+                        CompositionEffectBrush micaEffectBrush = compositor.CreateEffectFactory(colorBlendEffect, animatableProperties).CreateBrush();
                         micaEffectBrush.SetSourceParameter("BlurredWallpaperBackdrop", backdrop);
 
                         brush = micaEffectBrush;
@@ -536,15 +535,11 @@ namespace MicaForUWP.Media
             }
         }
 
-        private async void On_EnergySaverStatusChanged(object sender, object e)
+        private void On_EnergySaverStatusChanged(object sender, object e)
         {
-            if (PowerManager.EnergySaverStatus == EnergySaverStatus.On)
-            {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => SetCompositionFocus(false));
-            }
-            else
-            {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            _ = PowerManager.EnergySaverStatus == EnergySaverStatus.On
+                ? Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => SetCompositionFocus(false))
+                : Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     if (BackgroundSource == BackgroundSource.Backdrop)
                     {
@@ -559,7 +554,6 @@ namespace MicaForUWP.Media
                             : window.Visible);
                     }
                 });
-            }
         }
 
         private void SetCompositionFocus(bool isGotFocus)

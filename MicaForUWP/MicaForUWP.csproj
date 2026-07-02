@@ -1,15 +1,17 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
  
   <PropertyGroup>
-    <FullTargets Condition="'$(FullTargets)' == ''">true</FullTargets>
     <AddCSWinRT Condition="'$(AddCSWinRT)' == ''">true</AddCSWinRT>
-    <NoWarn>$(NoWarn);NU1902;NU1903</NoWarn>
+    <FullTargets Condition="'$(FullTargets)' == ''">true</FullTargets>
+    <NoWarn>$(NoWarn);NU1902;NU1903;WIN2D0001</NoWarn>
+    <SuppressTfmSupportBuildWarnings>false</SuppressTfmSupportBuildWarnings>
+    <Win2DWarnNoPlatform>false</Win2DWarnNoPlatform>
   </PropertyGroup>
 
   <PropertyGroup>
     <Authors>wherewhere</Authors>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-    <Copyright>Copyright © 2017 - 2025 wherewhere. All Rights Reserved.</Copyright>
+    <Copyright>Copyright © 2017 - 2026 wherewhere. All Rights Reserved.</Copyright>
     <Deterministic>true</Deterministic>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -41,24 +43,25 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
+    <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">true</IsTrimmable>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(FullTargets)' == 'true'">
     <NuspecFile>MicaForUWP.nuspec</NuspecFile>
     <NuspecProperties>id=$(AssemblyName);version=$(VersionPrefix);title=$(Title);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);license=$(PackageLicenseExpression);icon=$(PackageIcon);readme=$(PackageReadmeFile);projectUrl=$(PackageProjectUrl);iconUrl=$(PackageIconUrl);description=$(Description);releaseNotes=$(PackageReleaseNotes);copyright=$(Copyright);repositoryType=$(RepositoryType);repositoryUrl=$(PackageProjectUrl);repositoryCommit=$(RepositoryCommit);buildOutput=bin\$(Configuration)</NuspecProperties>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">
-    <IsAotCompatible>true</IsAotCompatible>
-  </PropertyGroup>
-
   <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0-windows10.0.17763.0'))">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <UseUwp>true</UseUwp>
     <UseUwpTools>false</UseUwpTools>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'netcoreapp3.1'">
-    <PackageReference Include="Win2D.uwp" Version="1.28.2" />
+    <PackageReference Include="Win2D.uwp" Version="1.28.3" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'native'">
@@ -66,7 +69,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.26100.1742" />
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.22000.197" IsImplicitlyDefined="true" />
     <PackageReference Include="Win2D.uwp" Version="1.27.1" IsImplicitlyDefined="true" />
   </ItemGroup>
 
