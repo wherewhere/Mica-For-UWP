@@ -20,7 +20,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MicaDemo.ViewModels
 {
-    public class BrushViewModel : INotifyPropertyChanged
+    public sealed class BrushViewModel : INotifyPropertyChanged
     {
         private static readonly string[] imageTypes = new[] { ".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif", ".heif", ".heic" };
 
@@ -116,7 +116,7 @@ namespace MicaDemo.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected async void RaisePropertyChangedEvent([CallerMemberName] string name = null)
+        private async void RaisePropertyChangedEvent([CallerMemberName] string name = null)
         {
             if (name != null)
             {
@@ -125,7 +125,7 @@ namespace MicaDemo.ViewModels
             }
         }
 
-        protected async void RaisePropertyChangedEvent(params string[] names)
+        private async void RaisePropertyChangedEvent(params string[] names)
         {
             if (names != null)
             {
@@ -134,7 +134,7 @@ namespace MicaDemo.ViewModels
             }
         }
 
-        protected void SetProperty<TProperty>(ref TProperty property, TProperty value, [CallerMemberName] string name = null)
+        private void SetProperty<TProperty>(ref TProperty property, TProperty value, [CallerMemberName] string name = null)
         {
             if (property == null ? value != null : !property.Equals(value))
             {
@@ -200,7 +200,7 @@ namespace MicaDemo.ViewModels
         void ExitCompactOverlay();
     }
 
-    public class CoreWindowCompactOverlay : ICompactOverlay
+    public sealed class CoreWindowCompactOverlay : ICompactOverlay
     {
         private static readonly bool isSupportCompactOverlay = ApiInformation.IsMethodPresent("Windows.UI.ViewManagement.ApplicationView", "IsViewModeSupported");
         private readonly ApplicationView view = ApplicationView.GetForCurrentView();
@@ -227,7 +227,7 @@ namespace MicaDemo.ViewModels
         }
     }
 
-    public class AppWindowCompactOverlay : ICompactOverlay
+    public sealed class AppWindowCompactOverlay : ICompactOverlay
     {
         private static readonly bool isSupportCompactOverlay = ApiInformation.IsMethodPresent("Windows.UI.WindowManagement.AppWindowPresenter", "IsPresentationSupported");
         private readonly AppWindow window;

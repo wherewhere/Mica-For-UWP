@@ -9,7 +9,7 @@ namespace MicaDemo.Helpers.Converters
     /// <summary>
     /// This class converts a boolean value into a Visibility enumeration.
     /// </summary>
-    public class BoolToVisibilityConverter : BoolToObjectConverter
+    public sealed class BoolToVisibilityConverter : BoolToObjectConverter
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BoolToVisibilityConverter"/> class.
