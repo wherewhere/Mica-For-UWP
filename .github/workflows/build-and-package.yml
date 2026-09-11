@@ -54,6 +54,8 @@ jobs:
       - name: Create the app package
         run: msbuild $env:Solution_Name /m `
           /p:IsUseNetCore463=true `
+          /p:IsUpdateCIManifest=True `
+          /p:CIBuildID=$env:Build_ID `
           /p:LangVersion=latest `
           /p:AppxBundlePlatforms=$env:Appx_Bundle_Platforms `
           /p:Configuration=$env:Configuration `
@@ -65,6 +67,7 @@ jobs:
           /p:PackageCertificateKeyFile=$env:Signing_Certificate `
           /p:PackageCertificatePassword=$env:Password
         env:
+          Build_ID: ${{ github.run_number }}
           Appx_Bundle: Always
           Appx_Bundle_Platforms: x86|x64|ARM
           Appx_Package_Build_Mode: SideloadOnly
